@@ -7,16 +7,18 @@ const path = require('path');
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
 
-// Indirizzo principale del sito (si può cambiare con la variabile REDIRECT_TARGET su Railway)
-const TARGET = (process.env.REDIRECT_TARGET || 'http://www.jose-margareth.com').replace(/\/+$/, '');
+// Indirizzo principale del sito: è il dominio collegato su Railway
+// (si può cambiare con la variabile REDIRECT_TARGET su Railway)
+const TARGET = (process.env.REDIRECT_TARGET || 'https://jose-margareth.com').replace(/\/+$/, '');
 const TARGET_HOST = new URL(TARGET).host;
 
-// Domini che vengono reindirizzati all'indirizzo principale.
+// Domini che vengono reindirizzati all'indirizzo principale (quello principale viene sempre escluso).
 // "josé-margareth.com" con l'accento, su internet, si scrive "xn--jos-margareth-dhb.com".
 const REDIRECT_HOSTS = new Set([
   'xn--jos-margareth-dhb.com',
   'www.xn--jos-margareth-dhb.com',
   'jose-margareth.com',
+  'www.jose-margareth.com',
 ]);
 
 const MIME = {
@@ -49,7 +51,7 @@ function send(res, status, body, headers = {}) {
 const server = http.createServer((req, res) => {
   const host = (req.headers.host || '').toLowerCase().replace(/:\d+$/, '');
 
-  // 1) Reindirizzamento dei domini secondari -> http://www.jose-margareth.com
+  // 1) Reindirizzamento dei domini secondari -> indirizzo principale
   if (REDIRECT_HOSTS.has(host) && host !== TARGET_HOST) {
     res.writeHead(301, { Location: TARGET + req.url });
     return res.end();

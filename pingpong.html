@@ -1471,6 +1471,7 @@
 
   // pallina thor: sfera di tempesta con il martello d'argento e fulmini azzurri
   let thorBolts = [];
+  let ballBolts = [];
   function drawThor(x, y, r, t) {
     if (Math.random() < 0.22) {
       const a = Math.random() * Math.PI * 2;
@@ -1803,6 +1804,24 @@
 
     // particelle delle stagioni
     drawSeasonParticles();
+
+    // piccoli fulmini intorno alla pallina, del colore della pallina
+    // (Cursed e Thor hanno già i loro fulmini, neri e azzurri)
+    if (ballColor !== 'cursed' && ballColor !== 'thor') {
+      if (Math.random() < 0.18) {
+        const a = Math.random() * Math.PI * 2;
+        const len = 16 + Math.random() * 20;
+        const sx = ball.x + Math.cos(a) * BALL_R, sy = ball.y + Math.sin(a) * BALL_R;
+        const bolt = makeBolt(sx, sy, sx + Math.cos(a) * len, sy + Math.sin(a) * len, 4);
+        const col = currentColor(hue);
+        bolt.color = col;
+        bolt.glow = col;
+        bolt.width = 1.6;
+        bolt.branches = [];
+        ballBolts.push(bolt);
+      }
+    }
+    ballBolts = drawBolts(ballBolts);
 
     // pallina
     const col = currentColor(hue);

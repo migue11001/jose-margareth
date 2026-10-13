@@ -597,7 +597,8 @@
     const lbl = document.createElement('span');
     lbl.className = 'lbl';
     b.style.setProperty('--glow', GLOW[c.id] || c.value);
-    lbl.textContent = c.label;
+    lbl.dataset.i18n = 'color.' + c.id;
+    lbl.textContent = I18N.t('color.' + c.id);
     b.appendChild(lbl);
     if (c.value === 'rainbow') b.classList.add('rainbow-bg');
     else if (c.value === 'yinyang') b.classList.add('yinyang-bg');

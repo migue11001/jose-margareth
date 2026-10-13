@@ -30,7 +30,7 @@ Dal gioco puoi tornare alla Sala Giochi con il pulsante **← Tutti i giochi** i
 
 In fondo a ogni pagina (Sala Giochi, Ping Pong e PixelCraft) c'è la scelta della lingua: 🇮🇹 Italiano · 🇬🇧 English · 🇪🇸 Español · 🇯🇵 日本語 · 🇩🇪 Deutsch.
 La scelta vale per tutto il sito e viene ricordata dal browser. Le traduzioni sono tutte nel file `i18n.js`.
-I nomi dei colori della pallina restano in inglese in tutte le lingue.
+Anche i nomi dei colori della pallina cambiano con la lingua (es. Rosso · Red · Rojo · 赤 · Rot).
 
 ## Musica
 
@@ -62,7 +62,7 @@ Per cambiare canzone bisogna sostituire il contenuto dell'elemento `<audio id="m
 
 ## Colori della pallina
 
-I nomi dei colori sui pulsanti sono in inglese.
+I nomi dei colori sui pulsanti cambiano in base alla lingua scelta; qui sotto sono scritti in inglese.
 
 ### 🎨 Colori originali
 

@@ -50,8 +50,8 @@
   /* le sezioni dei colori stanno una accanto all'altra, come colonne */
   .palette {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+    gap: 8px;
     width: 100%;
     max-width: 960px;
     align-items: start;
@@ -73,7 +73,7 @@
     border-bottom: 1px solid #2a3155;
     margin-bottom: 2px;
   }
-  .colors .color-btn { width: 100%; padding: 7px 8px; }
+  .colors .color-btn { width: 100%; padding: 7px 6px; font-size: .85rem; }
   .colors > span { color: var(--text); font-weight: 600; }
 
   /* tutte le scritte lampeggiano piano, con una dissolvenza morbida */
@@ -233,6 +233,10 @@
     color: #fff;
     text-shadow: 0 0 3px #5a2208, 0 0 3px #5a2208;
   }
+  .flag-btn {
+    color: #fff;
+    text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 2px #000;
+  }
   .gold-bg {
     background:
       linear-gradient(135deg, transparent 0 40%, rgba(255,255,230,.85) 48% 52%, transparent 60%),
@@ -361,6 +365,10 @@
     <span>💎 Colori minerali</span>
   </div>
 
+  <div class="colors special" id="flag-colors">
+    <span>🚩 Flags Color</span>
+  </div>
+
   <div class="colors special" id="ultra-colors">
     <span>💥 Ultra Color</span>
   </div>
@@ -430,6 +438,15 @@
     { id: 'netherite',  label: 'Netherite',   value: 'netherite' },
     { id: 'rame',       label: 'Copper',      value: 'copper' },
     { id: 'oro',        label: 'Gold',        value: 'gold' },
+    { id: 'colombia',   label: 'Colombia',    value: 'flag-colombia' },
+    { id: 'italia',     label: 'Italy',       value: 'flag-italia' },
+    { id: 'bolivia',    label: 'Bolivia',     value: 'flag-bolivia' },
+    { id: 'inghilterra', label: 'England',    value: 'flag-inghilterra' },
+    { id: 'usa',        label: 'USA',         value: 'flag-usa' },
+    { id: 'francia',    label: 'France',      value: 'flag-francia' },
+    { id: 'spagna',     label: 'Spain',       value: 'flag-spagna' },
+    { id: 'germania',   label: 'Germany',     value: 'flag-germania' },
+    { id: 'svizzera',   label: 'Switzerland', value: 'flag-svizzera' },
     { id: 'ultra',      label: 'Ultra',       value: 'ultra' },
   ];
 
@@ -447,6 +464,102 @@
   let hue = 0;
   const trail = [];
 
+  // ---------- Bandiere ----------
+  function stripesH(g, w, h, list) {
+    const total = list.reduce((a, [, n]) => a + n, 0);
+    let y = 0;
+    list.forEach(([col, n]) => {
+      const sh = h * n / total;
+      g.fillStyle = col;
+      g.fillRect(0, Math.floor(y), w, Math.ceil(sh) + 1);
+      y += sh;
+    });
+  }
+  function stripesV(g, w, h, cols) {
+    cols.forEach((col, i) => {
+      g.fillStyle = col;
+      g.fillRect(Math.floor(i * w / cols.length), 0, Math.ceil(w / cols.length) + 1, h);
+    });
+  }
+
+  // colors: i tre colori per scia, sfondo del campo e luce; glow: la luce del nome sul pulsante
+  const FLAGS = {
+    colombia: {
+      colors: ['#FCD116', '#003893', '#CE1126'], glow: '#FCD116',
+      draw: (g, w, h) => stripesH(g, w, h, [['#FCD116', 2], ['#003893', 1], ['#CE1126', 1]]),
+    },
+    italia: {
+      colors: ['#009246', '#ffffff', '#CE2B37'], glow: '#2fd36a',
+      draw: (g, w, h) => stripesV(g, w, h, ['#009246', '#ffffff', '#CE2B37']),
+    },
+    bolivia: {
+      colors: ['#D52B1E', '#F9E300', '#007934'], glow: '#F9E300',
+      draw: (g, w, h) => stripesH(g, w, h, [['#D52B1E', 1], ['#F9E300', 1], ['#007934', 1]]),
+    },
+    inghilterra: {
+      colors: ['#ffffff', '#CE1124', '#ffffff'], glow: '#ff3b4e',
+      draw: (g, w, h) => {
+        g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h);
+        const t = h * 0.2;
+        g.fillStyle = '#CE1124';
+        g.fillRect(0, (h - t) / 2, w, t);
+        g.fillRect((w - t) / 2, 0, t, h);
+      },
+    },
+    usa: {
+      colors: ['#B22234', '#ffffff', '#3C3B6E'], glow: '#5b6bff',
+      draw: (g, w, h) => {
+        stripesH(g, w, h, Array.from({ length: 13 }, (_, i) => [i % 2 ? '#ffffff' : '#B22234', 1]));
+        const cw = w * 0.4, ch = h * 7 / 13;
+        g.fillStyle = '#3C3B6E';
+        g.fillRect(0, 0, cw, ch);
+        g.fillStyle = '#ffffff';
+        const rows = 5, cols = 6, rad = Math.max(0.6, Math.min(cw / cols, ch / rows) * 0.2);
+        for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+          g.beginPath();
+          g.arc((c + 0.5) * cw / cols, (r + 0.5) * ch / rows, rad, 0, Math.PI * 2);
+          g.fill();
+        }
+      },
+    },
+    francia: {
+      colors: ['#0055A4', '#ffffff', '#EF4135'], glow: '#3b8bff',
+      draw: (g, w, h) => stripesV(g, w, h, ['#0055A4', '#ffffff', '#EF4135']),
+    },
+    spagna: {
+      colors: ['#AA151B', '#F1BF00', '#AA151B'], glow: '#F1BF00',
+      draw: (g, w, h) => stripesH(g, w, h, [['#AA151B', 1], ['#F1BF00', 2], ['#AA151B', 1]]),
+    },
+    germania: {
+      colors: ['#000000', '#DD0000', '#FFCE00'], glow: '#FFCE00',
+      draw: (g, w, h) => stripesH(g, w, h, [['#000000', 1], ['#DD0000', 1], ['#FFCE00', 1]]),
+    },
+    svizzera: {
+      colors: ['#DA291C', '#ffffff', '#DA291C'], glow: '#ff3b2e',
+      draw: (g, w, h) => {
+        g.fillStyle = '#DA291C'; g.fillRect(0, 0, w, h);
+        const arm = Math.min(w, h) * 0.6, t = Math.min(w, h) * 0.2;
+        g.fillStyle = '#ffffff';
+        g.fillRect((w - arm) / 2, (h - t) / 2, arm, t);
+        g.fillRect((w - t) / 2, (h - arm) / 2, t, arm);
+      },
+    },
+  };
+
+  const flagCache = {};
+  function flagTex(id, w, h) {
+    const key = id + ':' + w + 'x' + h;
+    if (!flagCache[key]) {
+      const c = document.createElement('canvas');
+      c.width = w;
+      c.height = h;
+      FLAGS[id].draw(c.getContext('2d'), w, h);
+      flagCache[key] = c;
+    }
+    return flagCache[key];
+  }
+  const flagId = color => (typeof color === 'string' && color.startsWith('flag-')) ? color.slice(5) : null;
+
   // colore della luce dei nomi per i colori speciali (che non hanno un solo colore)
   const GLOW = {
     arcobaleno: '#ff4fd8', yinyang: '#ffffff', galassia: '#b05cff', caramella: '#ff3d7f',
@@ -457,6 +570,7 @@
     ametista: '#b57bff', netherite: '#9a8a90', rame: '#ff9a5a', oro: '#ffd84a',
     captain: '#3b6bff', thor: '#7ec8ff', hulk: '#5fd13a',
   };
+  Object.keys(FLAGS).forEach(id => { GLOW[id] = FLAGS[id].glow; });
 
   // Color buttons divisi in sezioni: originali, altri, speciali
   const ORIGINAL = ['rosso', 'blu', 'verde', 'rosa', 'giallo', 'arancione', 'bianco'];
@@ -467,6 +581,8 @@
   const heroEl = document.getElementById('hero-colors');
   const MINERAL = ['diamante', 'smeraldo', 'ametista', 'netherite', 'rame', 'oro'];
   const mineralEl = document.getElementById('mineral-colors');
+  const FLAG_IDS = Object.keys(FLAGS);
+  const flagEl = document.getElementById('flag-colors');
   const ULTRA = ['ultra'];
   const ultraEl = document.getElementById('ultra-colors');
   const originalEl = document.getElementById('original-colors');
@@ -502,6 +618,10 @@
     else if (c.value === 'water') b.classList.add('water-bg');
     else if (c.value === 'earth') b.classList.add('earth-bg');
     else if (c.value === 'snow') b.classList.add('snow-bg');
+    else if (flagId(c.value)) {
+      b.style.background = `url(${flagTex(flagId(c.value), 120, 60).toDataURL()}) center / cover`;
+      b.classList.add('flag-btn');
+    }
     else b.style.background = c.value;
     b.addEventListener('click', () => {
       selectedColor = c.value;
@@ -516,6 +636,7 @@
                   : ELEMENTAL.includes(c.id) ? elementalEl
                   : HERO.includes(c.id) ? heroEl
                   : MINERAL.includes(c.id) ? mineralEl
+                  : FLAG_IDS.includes(c.id) ? flagEl
                   : ULTRA.includes(c.id) ? ultraEl
                   : colorsEl;
     section.appendChild(b);
@@ -647,6 +768,10 @@
     if (ballColor === 'cursed') return cursedOn() ? '#ff1a1a' : '#5a0000';
     if (ballColor === 'cyborg') return cyborgOn() ? '#5ff3ff' : '#1e5bff';
     if (ballColor === 'diamond') return Math.floor(h / 20) % 3 ? '#4ff0ff' : '#e9feff';
+    if (flagId(ballColor)) {
+      const f = FLAGS[flagId(ballColor)];
+      return f.colors[Math.floor(h / 20) % f.colors.length];
+    }
     if (ballColor === 'amethyst') return Math.floor(h / 20) % 3 ? '#9b5de5' : '#e3c6ff';
     if (ballColor === 'netherite') return Math.floor(h / 20) % 3 ? '#4a4245' : '#8a7a80';
     if (ballColor === 'copper') return Math.floor(h / 20) % 4 ? '#e07b4a' : '#4fb8a0';
@@ -948,6 +1073,31 @@
     emerald: { light: '#9dffd0', mid: '#11c26d', dark: '#064d29', facet: 'rgba(200,255,225,0.7)', glow: '#50e3a4' },
     amethyst: { light: '#f0dcff', mid: '#9b5de5', dark: '#3c1a6b', facet: 'rgba(245,225,255,0.75)', glow: '#b57bff' },
   };
+
+  // pallina bandiera: la bandiera dentro la pallina, che ondeggia piano, con un riflesso lucido
+  function drawFlagBall(x, y, r, t, id) {
+    const f = FLAGS[id];
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.shadowColor = f.glow;
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = f.colors[0];
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.clip();
+    const w = r * 2.7, h = r * 2.1;
+    const sway = Math.sin(t / 350) * r * 0.25;
+    ctx.drawImage(flagTex(id, 54, 36), -w / 2 + sway, -h / 2, w, h);
+    const shine = ctx.createRadialGradient(-r * 0.4, -r * 0.45, 0, -r * 0.4, -r * 0.45, r);
+    shine.addColorStop(0, 'rgba(255,255,255,0.55)');
+    shine.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = shine;
+    ctx.fillRect(-r, -r, r * 2, r * 2);
+    ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(0, 0, r - 0.5, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+  }
 
   // metalli (netherite, rame, oro): sfera lucida con un riflesso che scorre
   const METALS = {
@@ -1364,6 +1514,7 @@
       const h = (t / 40) % 360;
       return [`hsl(${h}, 100%, 55%)`, `hsl(${h + 120}, 100%, 55%)`, `hsl(${h + 240}, 100%, 55%)`];
     }
+    if (flagId(color)) return FLAGS[flagId(color)].colors;
     return BG_THEMES[color] || [color, color, color];
   }
 
@@ -1475,6 +1626,8 @@
       drawGem(ball.x, ball.y, BALL_R, performance.now(), ballColor);
     } else if (METALS[ballColor]) {
       drawMetal(ball.x, ball.y, BALL_R, performance.now(), ballColor);
+    } else if (flagId(ballColor)) {
+      drawFlagBall(ball.x, ball.y, BALL_R, performance.now(), flagId(ballColor));
     } else if (ballColor === 'candy') {
       drawCandy(ball.x, ball.y, BALL_R, performance.now() / 200);
     } else if (ballColor === 'lava') {
@@ -1659,6 +1812,11 @@
       g.addColorStop(clamp(shine + 0.08, 0, 1), '#c8102e');
       g.addColorStop(1, '#8a0a10');
       ctx.fillStyle = g;
+    } else if (flagId(ballColor)) {
+      // la bandiera dentro le lettere
+      const pat = ctx.createPattern(flagTex(flagId(ballColor), 480, 140), 'no-repeat');
+      pat.setTransform(new DOMMatrix().translate(-240, -110));
+      ctx.fillStyle = pat;
     } else if (GEMS[ballColor] || METALS[ballColor]) {
       // colori della gemma o del metallo con un riflesso bianco che li attraversa
       const c = GEMS[ballColor] || METALS[ballColor];

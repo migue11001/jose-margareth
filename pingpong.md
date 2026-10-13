@@ -108,6 +108,15 @@ Purple · Sky Blue · Turquoise · Brown
 | **Copper** | Sfera di rame arancione con macchie verde acqua di ossidazione e un riflesso | Dal rame scuro al rame chiaro, con un riflesso bianco |
 | **Gold** | Sfera d'oro lucida con un riflesso che scorre (prima era un colore semplice tra gli Originali 2) | Dall'oro scuro all'oro chiaro, con un riflesso bianco |
 
+### 🚩 Flags Color
+
+Colombia · Italy · Bolivia · England · USA · France · Spain · Germany · Switzerland
+
+- **Pallina:** la bandiera dentro la pallina, che ondeggia piano, con un riflesso lucido.
+- **Pulsante:** la bandiera come sfondo.
+- **Scia, sfondo del campo e luce:** i colori della bandiera.
+- **Scritta YOU WIN:** la bandiera dentro le lettere.
+
 ### 💥 Ultra Color
 
 | Colore | Pallina | Scritta YOU WIN |
@@ -136,4 +145,4 @@ Per aggiungere un nuovo colore semplice basta aggiungere una riga all'elenco `CO
 { id: 'menta', label: 'Mint', value: '#3dffb0' },
 ```
 
-Il pulsante comparirà nella sezione **Colori originali 2**, e il nuovo colore entrerà automaticamente anche nel giro di **Ultra**. Per metterlo in un'altra sezione, aggiungi il suo `id` all'elenco `ORIGINAL`, `SPECIAL`, `ELEMENTAL`, `HERO`, `MINERAL` o `ULTRA`.
+Il pulsante comparirà nella sezione **Colori originali 2**, e il nuovo colore entrerà automaticamente anche nel giro di **Ultra**. Per metterlo in un'altra sezione, aggiungi il suo `id` all'elenco `ORIGINAL`, `SPECIAL`, `ELEMENTAL`, `HERO`, `MINERAL` o `ULTRA` (per una nuova bandiera basta aggiungerla all'elenco `FLAGS`).

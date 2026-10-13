@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelCraft</title>
+<style>
+  :root {
+    --bg: #0f1220;
+    --panel: #1a1f36;
+    --border: #2a3155;
+    --text: #e8ebf7;
+    --muted: #8a91b4;
+    --accent: #5fa83a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    gap: 12px;
+  }
+  .top {
+    width: 100%;
+    max-width: 960px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .back {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .9rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--panel);
+    white-space: nowrap;
+  }
+  .back:hover { color: var(--text); border-color: var(--accent); }
+  h1 {
+    margin: 0;
+    font-family: "Courier New", ui-monospace, monospace;
+    font-weight: 900;
+    font-size: 1.9rem;
+    letter-spacing: 2px;
+    color: #7ed957;
+    text-shadow: 3px 3px 0 #2d5a1b, 0 0 14px rgba(126, 217, 87, .6);
+  }
+  .top .spacer { width: 130px; }
+
+  canvas {
+    width: 100%;
+    max-width: 960px;
+    height: auto;
+    image-rendering: pixelated;
+    border: 3px solid var(--border);
+    border-radius: 6px;
+    background: #87c5ff;
+    cursor: crosshair;
+    touch-action: none;
+  }
+
+  .status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    justify-content: center;
+    font-size: .9rem;
+    color: var(--muted);
+  }
+  .status b { color: var(--text); }
+  .status .on { color: #7ed957; }
+
+  .hotbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+    max-width: 960px;
+    padding: 8px;
+    background: #1b1b1b;
+    border: 3px solid #3a3a3a;
+    border-radius: 6px;
+  }
+  .slot {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    background: #2b2b2b;
+    border: 3px solid #555;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .slot:hover { border-color: #888; }
+  .slot.active { border-color: #fff; box-shadow: 0 0 10px #fff; }
+  .slot img { width: 30px; height: 30px; image-rendering: pixelated; }
+  .slot .emoji { font-size: 24px; line-height: 1; }
+  .slot .key {
+    position: absolute;
+    top: 1px;
+    left: 4px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 1px 1px 0 #000;
+  }
+
+  .buttons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .buttons button, .touch button {
+    background: var(--panel);
+    color: var(--text);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .buttons button:hover { border-color: var(--accent); }
+  .buttons button.on { border-color: var(--accent); color: #7ed957; }
+
+  .touch { display: none; gap: 10px; justify-content: center; user-select: none; }
+  .touch button { width: 64px; height: 56px; font-size: 1.4rem; padding: 0; touch-action: none; }
+  @media (pointer: coarse) { .touch { display: flex; } }
+
+  .help {
+    color: var(--muted);
+    font-size: .85rem;
+    text-align: center;
+    max-width: 960px;
+    line-height: 1.7;
+  }
+  kbd {
+    background: var(--panel);
+    border: 1px solid #333a60;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: .8rem;
+    color: var(--text);
+  }
+
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1b1b1b;
+    border: 2px solid var(--accent);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity .3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+
+  @media (max-width: 560px) {
+    .top .spacer { display: none; }
+    h1 { font-size: 1.5rem; }
+    .slot { width: 42px; height: 42px; }
+    .slot img { width: 26px; height: 26px; }
+  }
+</style>
+</head>
+<body>
+  <div class="top">
+    <a class="back" href="index.html">← Tutti i giochi</a>
+    <h1>PIXELCRAFT</h1>
+    <div class="spacer"></div>
+  </div>
+
+  <canvas id="game" width="960" height="540"></canvas>
+
+  <div class="status">
+    <span>In mano: <b id="toolName">Erba</b></span>
+    <span>Volo: <b id="flyState">OFF</b></span>
+    <span>Piazza sullo sfondo: <b id="bgState">OFF</b></span>
+  </div>
+
+  <div class="hotbar" id="hotbar"></div>
+
+  <div class="touch">
+    <button data-key="a">◀</button>
+    <button data-key="w">▲</button>
+    <button data-key="s">▼</button>
+    <button data-key="d">▶</button>
+  </div>
+
+  <div class="buttons">
+    <button id="flyBtn">✈️ Volo</button>
+    <button id="bgBtn">🧱 Sfondo</button>
+    <button id="saveBtn">💾 Salva</button>
+    <button id="newBtn">🌍 Nuovo mondo</button>
+  </div>
+
+  <p class="help">
+    Muoviti: <kbd>A</kbd> <kbd>D</kbd> o <kbd>←</kbd> <kbd>→</kbd> &nbsp;·&nbsp;
+    Salta: <kbd>W</kbd> <kbd>↑</kbd> o <kbd>Spazio</kbd> &nbsp;·&nbsp;
+    Volo: <kbd>F</kbd> (in volo <kbd>W</kbd>/<kbd>S</kbd> per salire e scendere)<br>
+    <b>Clic sinistro</b>: piazza il blocco &nbsp;·&nbsp; <b>Clic destro</b> (o <kbd>Shift</kbd>+clic): rompi &nbsp;·&nbsp;
+    Tieni premuto e trascina per costruire più blocchi<br>
+    Scegli il blocco: <kbd>1</kbd>…<kbd>0</kbd>, rotellina del mouse o <kbd>Q</kbd>/<kbd>E</kbd> &nbsp;·&nbsp;
+    <kbd>T</kbd> albero &nbsp;·&nbsp; <kbd>C</kbd> casa &nbsp;·&nbsp; <kbd>X</kbd> piccone &nbsp;·&nbsp;
+    <kbd>B</kbd> piazza sullo sfondo
+  </p>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const CW = canvas.width, CH = canvas.height;
+
+  const BS = 32;               // grandezza di un blocco sullo schermo (in pixel)
+  const WW = 256, WH = 96;     // grandezza del mondo (in blocchi)
+  const SEA = 58;              // livello del mare (riga)
+
+  // ---------- Blocchi ----------
+  const B = {
+    AIR: 0, GRASS: 1, DIRT: 2, STONE: 3, COBBLE: 4, LOG: 5, LEAVES: 6, PLANKS: 7, GLASS: 8,
+    BRICKS: 9, SAND: 10, WATER: 11, BEDROCK: 12, DOOR: 13, ROOF: 14, FLOWER: 15,
+  };
+  const NAMES = {
+    [B.GRASS]: 'Erba', [B.DIRT]: 'Terra', [B.STONE]: 'Pietra', [B.COBBLE]: 'Ciottoli',
+    [B.LOG]: 'Tronco', [B.LEAVES]: 'Foglie', [B.PLANKS]: 'Assi di legno', [B.GLASS]: 'Vetro',
+    [B.BRICKS]: 'Mattoni', [B.SAND]: 'Sabbia', [B.WATER]: 'Acqua', [B.BEDROCK]: 'Roccia madre',
+    [B.DOOR]: 'Porta', [B.ROOF]: 'Tegole', [B.FLOWER]: 'Fiore',
+  };
+  // blocchi che si possono attraversare
+  const PASSABLE = new Set([B.AIR, B.WATER, B.DOOR, B.FLOWER]);
+  // blocchi attraverso cui si vede lo sfondo
+  const SEE_THROUGH = new Set([B.AIR, B.GLASS, B.WATER, B.FLOWER]);
+
+  // ---------- Texture a pixel (16x16), generate al volo ----------
+  function rng(seed) {
+    let s = (seed >>> 0) || 1;
+    return () => {
+      s ^= s << 13; s ^= s >>> 17; s ^= s << 5;
+      return ((s >>> 0) % 100000) / 100000;
+    };
+  }
+  const pick = (r, arr) => arr[Math.floor(r() * arr.length)];
+
+  function texture(seed, draw) {
+    const c = document.createElement('canvas');
+    c.width = c.height = 16;
+    const g = c.getContext('2d');
+    const r = rng(seed);
+    const px = (x, y, col) => { g.fillStyle = col; g.fillRect(x, y, 1, 1); };
+    draw(g, r, px);
+    return c;
+  }
+  function noise(r, px, cols) {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) px(x, y, pick(r, cols));
+  }
+
+  const DIRT_COLS = ['#866043', '#79553a', '#966c4a', '#6b4a30'];
+  const PLANK_COLS = ['#b8945f', '#a98653', '#c29e68'];
+
+  const TEX = {
+    [B.GRASS]: texture(11, (g, r, px) => {
+      noise(r, px, DIRT_COLS);
+      for (let x = 0; x < 16; x++) {
+        const h = 3 + (r() < 0.5 ? 1 : 0) + (r() < 0.25 ? 1 : 0);
+        for (let y = 0; y < h; y++) px(x, y, pick(r, ['#5fa83a', '#6bb845', '#559a33', '#4f8f2f']));
+      }
+    }),
+    [B.DIRT]: texture(12, (g, r, px) => noise(r, px, DIRT_COLS)),
+    [B.STONE]: texture(13, (g, r, px) => {
+      noise(r, px, ['#7d7d7d', '#888888', '#737373', '#8f8f8f']);
+      for (let i = 0; i < 10; i++) px(Math.floor(r() * 16), Math.floor(r() * 16), '#5f5f5f');
+    }),
+    [B.COBBLE]: texture(14, (g, r, px) => {
+      noise(r, px, ['#8a8a8a', '#9a9a9a', '#7a7a7a']);
+      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+        const edge = (y % 5 === 0 && r() < 0.85) || ((x + (Math.floor(y / 5) % 2) * 3) % 6 === 0 && r() < 0.85);
+        if (edge) px(x, y, pick(r, ['#4a4a4a', '#555555']));
+      }
+    }),
+    [B.LOG]: texture(15, (g, r, px) => {
+      const cols = ['#6b4a2b', '#5c3f24', '#7a5533'];
+      for (let x = 0; x < 16; x++) {
+        const base = (x * 7) % 3;
+        for (let y = 0; y < 16; y++) px(x, y, cols[(base + (r() < 0.2 ? 1 : 0)) % 3]);
+      }
+      for (let i = 0; i < 6; i++) {
+        const x = Math.floor(r() * 16), y = Math.floor(r() * 14);
+        px(x, y, '#4a321b'); px(x, y + 1, '#4a321b');
+      }
+    }),
+    [B.LEAVES]: texture(16, (g, r, px) => {
+      noise(r, px, ['#3f8a2c', '#357a24', '#4c9a35', '#2d6b1e']);
+      for (let i = 0; i < 14; i++) px(Math.floor(r() * 16), Math.floor(r() * 16), '#245a17');
+      for (let i = 0; i < 6; i++) px(Math.floor(r() * 16), Math.floor(r() * 16), '#62b04a');
+    }),
+    [B.PLANKS]: texture(17, (g, r, px) => {
+      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+        const board = Math.floor(y / 4);
+        const seam = board % 2 ? 4 : 11;
+        if (y % 4 === 3 || x === seam) px(x, y, '#7f6038');
+        else px(x, y, pick(r, PLANK_COLS));
+      }
+    }),
+    [B.GLASS]: texture(18, (g, r, px) => {
+      g.fillStyle = 'rgba(200, 235, 255, 0.18)';
+      g.fillRect(0, 0, 16, 16);
+      for (let i = 0; i < 16; i++) {
+        px(i, 0, '#e6f7ff'); px(i, 15, '#bfe3f5'); px(0, i, '#e6f7ff'); px(15, i, '#bfe3f5');
+      }
+      [[3, 5], [4, 4], [5, 3], [9, 11], [10, 10], [11, 9], [12, 8]].forEach(([x, y]) => px(x, y, '#ffffff'));
+    }),
+    [B.BRICKS]: texture(19, (g, r, px) => {
+      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+        const row = Math.floor(y / 4);
+        const vertical = (x + (row % 2) * 4) % 8 === 0;
+        if (y % 4 === 3 || vertical) px(x, y, pick(r, ['#c8c0b4', '#b9b1a5']));
+        else px(x, y, pick(r, ['#9c4a35', '#a85440', '#8e412e']));
+      }
+    }),
+    [B.SAND]: texture(20, (g, r, px) => noise(r, px, ['#dbcf8e', '#d4c681', '#e3d89c', '#cfc07a'])),
+    [B.WATER]: texture(21, (g, r, px) => {
+      g.fillStyle = 'rgba(40, 110, 220, 0.72)';
+      g.fillRect(0, 0, 16, 16);
+      for (let y = 2; y < 16; y += 5) for (let x = 0; x < 16; x++) {
+        if ((x + y) % 6 < 3) px(x, y + ((x % 6) < 3 ? 0 : 1), 'rgba(140, 200, 255, 0.55)');
+      }
+    }),
+    [B.BEDROCK]: texture(22, (g, r, px) => noise(r, px, ['#2b2b2b', '#444444', '#1d1d1d', '#555555'])),
+    [B.DOOR]: texture(23, (g, r, px) => {
+      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) px(x, y, pick(r, ['#7a5a32', '#6c4e2a', '#83623a']));
+      for (let i = 0; i < 16; i++) { px(i, 0, '#4b3419'); px(i, 15, '#4b3419'); px(0, i, '#4b3419'); px(15, i, '#4b3419'); }
+      for (let y = 3; y < 7; y++) for (let x = 4; x < 12; x++) px(x, y, (x === 7 || x === 8) ? '#4b3419' : '#bfe3ff');
+      px(12, 10, '#e8d36a'); px(12, 11, '#c9b34a');
+    }),
+    [B.ROOF]: texture(24, (g, r, px) => {
+      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+        const row = Math.floor(y / 4);
+        if (y % 4 === 3 || ((x + row * 2) % 4 === 0 && y % 4 === 2)) px(x, y, '#6e1c18');
+        else px(x, y, pick(r, ['#a8322b', '#962a24', '#b53a32']));
+      }
+    }),
+    [B.FLOWER]: texture(25, (g, r, px) => {
+      for (let y = 8; y < 16; y++) { px(7, y, '#3c8a2a'); px(8, y, '#357a24'); }
+      px(5, 11, '#4c9a35'); px(6, 11, '#4c9a35'); px(9, 12, '#4c9a35'); px(10, 12, '#4c9a35');
+      for (const [x, y] of [[7, 3], [8, 3], [6, 4], [9, 4], [5, 5], [10, 5], [6, 6], [9, 6], [7, 7], [8, 7], [6, 5], [9, 5]]) px(x, y, '#e0302a');
+      px(7, 4, '#ff5a4a'); px(8, 4, '#ff5a4a');
+      px(7, 5, '#ffd23a'); px(8, 5, '#ffd23a'); px(7, 6, '#f2b81e'); px(8, 6, '#f2b81e');
+    }),
+  };
+
+  // ---------- Mondo ----------
+  const fg = new Uint8Array(WW * WH);   // blocchi davanti (solidi)
+  const bg = new Uint8Array(WW * WH);   // blocchi di sfondo (muri dietro)
+  const idx = (x, y) => y * WW + x;
+  const inside = (x, y) => x >= 0 && x < WW && y >= 0 && y < WH;
+
+  function getFg(x, y) {
+    if (x < 0 || x >= WW || y >= WH) return B.BEDROCK;
+    if (y < 0) return B.AIR;
+    return fg[idx(x, y)];
+  }
+  function getBg(x, y) { return inside(x, y) ? bg[idx(x, y)] : 0; }
+  const isSolid = (x, y) => !PASSABLE.has(getFg(x, y));
+
+  function setFg(x, y, id) {
+    if (!inside(x, y) || fg[idx(x, y)] === B.BEDROCK) return;
+    fg[idx(x, y)] = id;
+  }
+  function setBg(x, y, id) {
+    if (inside(x, y)) bg[idx(x, y)] = id;
+  }
+
+  // albero: (x, baseY) è la cella dove parte il tronco
+  function plantTree(x, baseY, r, natural) {
+    const h = 4 + Math.floor(r() * 2);
+    const top = baseY - h + 1;
+    const rows = [[top - 2, 1], [top - 1, 2], [top, 2], [top + 1, 2]];
+    for (const [y, w] of rows) {
+      for (let dx = -w; dx <= w; dx++) {
+        const corner = Math.abs(dx) === w && (y === top - 1 || y === top + 1);
+        if (natural && corner && r() < 0.5) continue;
+        if (PASSABLE.has(getFg(x + dx, y))) setFg(x + dx, y, B.LEAVES);
+      }
+    }
+    for (let i = 0; i < h; i++) setFg(x, baseY - i, B.LOG);
+  }
+
+  // casa: (cx, cy) è la cella in basso al centro, dove sta in piedi il giocatore
+  function placeHouse(cx, cy) {
+    const L = cx - 4, R = cx + 4;
+    // fondamenta di ciottoli (scendono fino a terra se la casa è sospesa)
+    for (let x = L - 1; x <= R + 1; x++) {
+      setFg(x, cy + 1, B.COBBLE);
+      for (let y = cy + 2; y < cy + 10 && !isSolid(x, y); y++) setFg(x, y, B.COBBLE);
+    }
+    // muri, stanza vuota con le assi sullo sfondo
+    for (let x = L; x <= R; x++) {
+      for (let y = cy - 3; y <= cy; y++) {
+        if (x === L || x === R) setFg(x, y, B.LOG);
+        else { setFg(x, y, B.AIR); setBg(x, y, B.PLANKS); }
+      }
+    }
+    // finestre sul muro di fondo
+    for (const wx of [cx - 2, cx + 2]) for (const wy of [cy - 2, cy - 1]) setBg(wx, wy, B.GLASS);
+    // porta a sinistra e finestra a destra
+    setFg(L, cy, B.DOOR);
+    setFg(L, cy - 1, B.DOOR);
+    setFg(R, cy - 2, B.GLASS);
+    // soffitto
+    for (let x = L; x <= R; x++) setFg(x, cy - 4, B.PLANKS);
+    // tetto a triangolo
+    for (let i = 0; i <= 5; i++) {
+      const y = cy - 5 - i;
+      for (let x = L - 1 + i; x <= R + 1 - i; x++) setFg(x, y, B.ROOF);
+    }
+  }
+
+  let heights = [];
+
+  function generate() {
+    fg.fill(0);
+    bg.fill(0);
+    const r = rng(Date.now());
+    const p1 = r() * 1000, p2 = r() * 1000, p3 = r() * 1000;
+    heights = [];
+    for (let x = 0; x < WW; x++) {
+      const h = 52 + Math.sin((x + p1) / 23) * 5 + Math.sin((x + p2) / 9) * 2 + Math.sin((x + p3) / 51) * 6;
+      heights.push(Math.round(h));
+    }
+    for (let x = 0; x < WW; x++) {
+      const s = heights[x];
+      const beach = s >= SEA - 1;
+      for (let y = s; y < WH; y++) {
+        let id;
+        if (y === WH - 1) id = B.BEDROCK;
+        else if (y === s) id = beach ? B.SAND : B.GRASS;
+        else if (y < s + 4) id = beach ? B.SAND : B.DIRT;
+        else id = B.STONE;
+        fg[idx(x, y)] = id;
+        if (y > s) bg[idx(x, y)] = y < s + 4 ? B.DIRT : B.STONE;
+      }
+      for (let y = SEA; y < s; y++) fg[idx(x, y)] = B.WATER;
+    }
+    // alberi e fiori
+    for (let x = 3; x < WW - 3; x++) {
+      const s = heights[x];
+      if (s >= SEA - 1) continue;
+      if (r() < 0.12) {
+        plantTree(x, s - 1, r, true);
+        x += 4;
+      } else if (r() < 0.1) {
+        fg[idx(x, s - 1)] = B.FLOWER;
+      }
+    }
+    spawnPlayer();
+  }
+
+  // ---------- Giocatore ----------
+  const player = { x: 0, y: 0, w: 0.7, h: 1.75, vx: 0, vy: 0, onGround: false, dir: 1, walk: 0 };
+  let flying = false;
+  let bgMode = false;
+
+  // il giocatore nasce sull'erba, vicino al centro, lontano dall'acqua e dagli alberi
+  function spawnPlayer() {
+    const mid = Math.floor(WW / 2);
+    const free = x => heights[x] < SEA - 1 && !isSolid(x, heights[x] - 1) && !isSolid(x, heights[x] - 2)
+      && getFg(x, heights[x] - 1) !== B.LOG;
+    let sx = mid;
+    for (let d = 0; d < WW / 2; d++) {
+      if (free(mid + d)) { sx = mid + d; break; }
+      if (free(mid - d)) { sx = mid - d; break; }
+    }
+    let y = heights[sx] !== undefined ? heights[sx] : 0;
+    if (heights[sx] === undefined) while (y < WH - 1 && !isSolid(sx, y)) y++;
+    player.x = sx + 0.15;
+    player.y = y - player.h - 0.01;
+    player.vx = player.vy = 0;
+  }
+
+  function boxHits(x, y) {
+    const x0 = Math.floor(x), x1 = Math.floor(x + player.w - 1e-6);
+    const y0 = Math.floor(y), y1 = Math.floor(y + player.h - 1e-6);
+    for (let cy = y0; cy <= y1; cy++) for (let cx = x0; cx <= x1; cx++) if (isSolid(cx, cy)) return true;
+    return false;
+  }
+
+  const keys = {};
+  const held = k => !!keys[k];
+
+  function stepPlayer(dt) {
+    const left = held('a') || held('arrowleft');
+    const right = held('d') || held('arrowright');
+    const up = held('w') || held('arrowup') || held(' ');
+    const down = held('s') || held('arrowdown');
+    const inWater = getFg(Math.floor(player.x + player.w / 2), Math.floor(player.y + player.h * 0.6)) === B.WATER;
+
+    const speed = inWater && !flying ? 3 : 5.5;
+    player.vx = (right - left) * speed;
+    if (player.vx) player.dir = Math.sign(player.vx);
+
+    if (flying) {
+      player.vy = (down - up) * 7;
+    } else if (inWater) {
+      player.vy += 8 * dt;
+      if (up) player.vy = -4;
+      player.vy = Math.min(player.vy, 3);
+    } else {
+      player.vy += 30 * dt;
+      if (up && player.onGround) player.vy = -10;
+      player.vy = Math.min(player.vy, 22);
+    }
+
+    // movimento orizzontale
+    let nx = player.x + player.vx * dt;
+    if (boxHits(nx, player.y)) {
+      // gradino automatico: se l'ostacolo è alto un solo blocco ci sale sopra
+      if (!flying && player.onGround && !boxHits(nx, player.y - 1.01)) {
+        player.y -= 1.01;
+      } else {
+        nx = player.vx > 0 ? Math.floor(nx + player.w) - player.w - 1e-4 : Math.floor(nx) + 1;
+      }
+    }
+    player.x = nx;
+
+    // movimento verticale
+    let ny = player.y + player.vy * dt;
+    if (boxHits(player.x, ny)) {
+      if (player.vy > 0) {
+        ny = Math.floor(ny + player.h) - player.h - 1e-4;
+        player.onGround = true;
+      } else {
+        ny = Math.floor(ny) + 1;
+      }
+      player.vy = 0;
+    } else {
+      player.onGround = false;
+    }
+    player.y = Math.max(-4, ny);
+    if (player.y > WH + 2) spawnPlayer();
+
+    if (player.vx && (player.onGround || flying)) player.walk += dt * 10;
+    else player.walk = 0;
+  }
+
+  // ---------- Strumenti (barra in basso) ----------
+  const TOOLS = [
+    B.GRASS, B.DIRT, B.STONE, B.COBBLE, B.LOG, B.LEAVES, B.PLANKS, B.GLASS, B.BRICKS, B.ROOF,
+    B.DOOR, B.SAND, B.FLOWER, B.WATER,
+  ].map(id => ({ type: 'block', id, name: NAMES[id] }));
+  TOOLS.push({ type: 'stamp', id: 'tree', name: 'Albero', emoji: '🌳', key: 'T' });
+  TOOLS.push({ type: 'stamp', id: 'house', name: 'Casa', emoji: '🏠', key: 'C' });
+  TOOLS.push({ type: 'break', name: 'Piccone (rompi)', emoji: '⛏️', key: 'X' });
+  const TREE_TOOL = TOOLS.length - 3, HOUSE_TOOL = TOOLS.length - 2, BREAK_TOOL = TOOLS.length - 1;
+
+  let selected = 0;
+  const hotbar = document.getElementById('hotbar');
+  const slots = TOOLS.map((tool, i) => {
+    const b = document.createElement('button');
+    b.className = 'slot';
+    b.title = tool.name;
+    if (tool.type === 'block') {
+      const img = document.createElement('img');
+      img.src = TEX[tool.id].toDataURL();
+      img.alt = tool.name;
+      b.appendChild(img);
+    } else {
+      const e = document.createElement('span');
+      e.className = 'emoji';
+      e.textContent = tool.emoji;
+      b.appendChild(e);
+    }
+    const k = document.createElement('span');
+    k.className = 'key';
+    k.textContent = i < 10 ? String((i + 1) % 10) : (tool.key || '');
+    b.appendChild(k);
+    b.addEventListener('click', () => { select(i); b.blur(); });
+    hotbar.appendChild(b);
+    return b;
+  });
+
+  function select(i) {
+    selected = (i + TOOLS.length) % TOOLS.length;
+    slots.forEach((s, j) => s.classList.toggle('active', j === selected));
+    document.getElementById('toolName').textContent = TOOLS[selected].name;
+  }
+  select(0);
+
+  // ---------- Mouse / tocco ----------
+  let camX = 0, camY = 0;
+  const mouse = { x: -1, y: -1, over: false };
+  let painting = null;
+  let lastCell = '';
+
+  function cellAt() {
+    return { cx: Math.floor((mouse.x + camX) / BS), cy: Math.floor((mouse.y + camY) / BS) };
+  }
+
+  function overlapsPlayer(cx, cy) {
+    return cx + 1 > player.x && cx < player.x + player.w && cy + 1 > player.y && cy < player.y + player.h;
+  }
+
+  function act(kind, first) {
+    const { cx, cy } = cellAt();
+    if (!inside(cx, cy)) return;
+    const tool = TOOLS[selected];
+
+    if (kind === 'break') {
+      if (bgMode) { setBg(cx, cy, 0); return; }
+      const f = getFg(cx, cy);
+      if (f === B.BEDROCK) return;
+      if (f !== B.AIR) setFg(cx, cy, B.AIR);
+      else setBg(cx, cy, 0);
+      return;
+    }
+
+    if (tool.type === 'stamp') {
+      if (!first) return;
+      const baseY = isSolid(cx, cy) ? cy - 1 : cy;
+      if (tool.id === 'tree') plantTree(cx, baseY, rng(Date.now()), false);
+      else placeHouse(cx, baseY);
+      return;
+    }
+
+    // piazza un blocco
+    if (bgMode) { setBg(cx, cy, tool.id); return; }
+    if (!PASSABLE.has(getFg(cx, cy)) || getFg(cx, cy) === tool.id) return;
+    if (!PASSABLE.has(tool.id) && overlapsPlayer(cx, cy)) return;
+    setFg(cx, cy, tool.id);
+  }
+
+  function updateMouse(e) {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = (e.clientX - rect.left) * (CW / rect.width);
+    mouse.y = (e.clientY - rect.top) * (CH / rect.height);
+    mouse.over = true;
+  }
+
+  canvas.addEventListener('pointerdown', e => {
+    updateMouse(e);
+    const breaking = e.button === 2 || e.shiftKey || TOOLS[selected].type === 'break';
+    painting = breaking ? 'break' : 'use';
+    const { cx, cy } = cellAt();
+    lastCell = cx + ',' + cy;
+    act(painting, true);
+    canvas.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  canvas.addEventListener('pointermove', e => {
+    updateMouse(e);
+    if (!painting) return;
+    const { cx, cy } = cellAt();
+    const key = cx + ',' + cy;
+    if (key !== lastCell) { lastCell = key; act(painting, false); }
+  });
+  const stopPainting = () => { painting = null; };
+  canvas.addEventListener('pointerup', stopPainting);
+  canvas.addEventListener('pointercancel', stopPainting);
+  canvas.addEventListener('pointerleave', () => { if (!painting) mouse.over = false; });
+  canvas.addEventListener('contextmenu', e => e.preventDefault());
+  canvas.addEventListener('wheel', e => {
+    e.preventDefault();
+    select(selected + (e.deltaY > 0 ? 1 : -1));
+  }, { passive: false });
+
+  // ---------- Tastiera ----------
+  function toggleFly() {
+    flying = !flying;
+    player.vy = 0;
+    const el = document.getElementById('flyState');
+    el.textContent = flying ? 'ON' : 'OFF';
+    el.classList.toggle('on', flying);
+    document.getElementById('flyBtn').classList.toggle('on', flying);
+  }
+  function toggleBg() {
+    bgMode = !bgMode;
+    const el = document.getElementById('bgState');
+    el.textContent = bgMode ? 'ON' : 'OFF';
+    el.classList.toggle('on', bgMode);
+    document.getElementById('bgBtn').classList.toggle('on', bgMode);
+  }
+
+  window.addEventListener('keydown', e => {
+    const k = e.key.toLowerCase();
+    if ([' ', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) e.preventDefault();
+    if (e.repeat) { keys[k] = true; return; }
+    if (k >= '0' && k <= '9') select(k === '0' ? 9 : Number(k) - 1);
+    else if (k === 'q') select(selected - 1);
+    else if (k === 'e') select(selected + 1);
+    else if (k === 't') select(TREE_TOOL);
+    else if (k === 'c') select(HOUSE_TOOL);
+    else if (k === 'x') select(BREAK_TOOL);
+    else if (k === 'f') toggleFly();
+    else if (k === 'b') toggleBg();
+    keys[k] = true;
+  });
+  window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+  window.addEventListener('blur', () => { for (const k in keys) keys[k] = false; });
+
+  // pulsanti touch
+  document.querySelectorAll('.touch button').forEach(b => {
+    const k = b.dataset.key;
+    b.addEventListener('pointerdown', e => { keys[k] = true; e.preventDefault(); });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => b.addEventListener(ev, () => { keys[k] = false; }));
+  });
+
+  // ---------- Salvataggio ----------
+  const SAVE_KEY = 'pixelcraft-mondo-v1';
+  const toast = document.getElementById('toast');
+  let toastTimer = null;
+  function showToast(text) {
+    toast.textContent = text;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 1600);
+  }
+
+  function toB64(arr) {
+    let s = '';
+    for (let i = 0; i < arr.length; i += 0x8000) s += String.fromCharCode.apply(null, arr.subarray(i, i + 0x8000));
+    return btoa(s);
+  }
+  function fromB64(str, arr) {
+    const s = atob(str);
+    for (let i = 0; i < arr.length && i < s.length; i++) arr[i] = s.charCodeAt(i);
+  }
+
+  function saveWorld(quiet) {
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify({
+        fg: toB64(fg), bg: toB64(bg), x: player.x, y: player.y, heights,
+      }));
+      if (!quiet) showToast('💾 Mondo salvato');
+    } catch (e) {
+      if (!quiet) showToast('Non è stato possibile salvare il mondo');
+    }
+  }
+
+  function loadWorld() {
+    try {
+      const raw = localStorage.getItem(SAVE_KEY);
+      if (!raw) return false;
+      const d = JSON.parse(raw);
+      fromB64(d.fg, fg);
+      fromB64(d.bg, bg);
+      heights = d.heights || [];
+      player.x = d.x;
+      player.y = d.y;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  document.getElementById('flyBtn').addEventListener('click', e => { toggleFly(); e.currentTarget.blur(); });
+  document.getElementById('bgBtn').addEventListener('click', e => { toggleBg(); e.currentTarget.blur(); });
+  document.getElementById('saveBtn').addEventListener('click', e => { saveWorld(false); e.currentTarget.blur(); });
+  document.getElementById('newBtn').addEventListener('click', e => {
+    e.currentTarget.blur();
+    if (confirm('Vuoi creare un nuovo mondo? Quello attuale verrà cancellato.')) {
+      generate();
+      saveWorld(true);
+      showToast('🌍 Nuovo mondo creato');
+    }
+  });
+  setInterval(() => saveWorld(true), 15000);
+  window.addEventListener('beforeunload', () => saveWorld(true));
+
+  // ---------- Disegno ----------
+  const clouds = Array.from({ length: 14 }, (_, i) => ({
+    x: i * 260 + Math.random() * 120,
+    y: 30 + Math.random() * 110,
+    w: 4 + Math.floor(Math.random() * 4),
+  }));
+
+  function drawSky(t) {
+    const g = ctx.createLinearGradient(0, 0, 0, CH);
+    g.addColorStop(0, '#5aa7ff');
+    g.addColorStop(1, '#c4e6ff');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, CW, CH);
+
+    // sole a pixel
+    const sx = CW - 150, sy = 50;
+    ctx.fillStyle = '#fff6b0';
+    ctx.fillRect(sx - 6, sy - 6, 68, 68);
+    ctx.fillStyle = '#ffe14b';
+    ctx.fillRect(sx, sy, 56, 56);
+
+    // nuvole a blocchi (si muovono piano, con parallasse)
+    const span = clouds.length * 260;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+    clouds.forEach(c => {
+      let x = (c.x - camX * 0.3 + t * 0.008) % span;
+      if (x < -300) x += span;
+      const u = 16;
+      ctx.fillRect(x, c.y, c.w * u * 2, u);
+      ctx.fillRect(x + u, c.y - u, (c.w * 2 - 2) * u, u);
+      ctx.fillRect(x + u * 2, c.y + u, (c.w * 2 - 3) * u, u);
+    });
+  }
+
+  function drawPlayer() {
+    const u = 2; // ogni "pixel" del personaggio è 2x2 pixel
+    const w = 12 * u;
+    const x = Math.round(player.x * BS + (player.w * BS - w) / 2 - camX);
+    const y = Math.round(player.y * BS - camY);
+    const d = player.dir;
+    const R = (px, py, pw, ph, col) => {
+      ctx.fillStyle = col;
+      const rx = d > 0 ? px : 12 - px - pw;
+      ctx.fillRect(x + rx * u, y + py * u, pw * u, ph * u);
+    };
+    const swing = Math.round(Math.sin(player.walk) * 2);
+
+    // gambe
+    R(2, 18 + Math.max(0, swing), 4, 8 - Math.max(0, swing), '#3a3fa8');
+    R(6, 18 + Math.max(0, -swing), 4, 8 - Math.max(0, -swing), '#2f3490');
+    R(2, 26, 4, 2, '#555555');
+    R(6, 26, 4, 2, '#4a4a4a');
+    // braccio dietro
+    R(10, 9 + swing, 2, 8, '#26889a');
+    // corpo
+    R(2, 8, 8, 10, '#2fa4b8');
+    R(2, 16, 8, 2, '#278c9d');
+    // braccio davanti
+    R(0, 9 - swing, 2, 7, '#2fa4b8');
+    R(0, 16 - swing, 2, 2, '#c8916a');
+    // testa
+    R(2, 0, 8, 8, '#c8916a');
+    R(2, 0, 8, 2, '#4a2f1a');
+    R(2, 2, 1, 3, '#4a2f1a');
+    // occhio e bocca (verso la direzione in cui guarda)
+    R(7, 4, 2, 1, '#ffffff');
+    R(8, 4, 1, 1, '#3b3bd6');
+    R(6, 6, 3, 1, '#8a5a3c');
+  }
+
+  function drawBlock(id, sx, sy) {
+    ctx.drawImage(TEX[id], sx, sy, BS, BS);
+  }
+
+  function drawWorld() {
+    const x0 = Math.max(0, Math.floor(camX / BS)), x1 = Math.min(WW - 1, Math.floor((camX + CW) / BS));
+    const y0 = Math.max(0, Math.floor(camY / BS)), y1 = Math.min(WH - 1, Math.floor((camY + CH) / BS));
+    const water = [];
+    for (let y = y0; y <= y1; y++) {
+      for (let x = x0; x <= x1; x++) {
+        const f = fg[idx(x, y)], b = bg[idx(x, y)];
+        const sx = x * BS - camX, sy = y * BS - camY;
+        if (b && SEE_THROUGH.has(f)) {
+          drawBlock(b, sx, sy);
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
+          ctx.fillRect(sx, sy, BS, BS);
+        }
+        if (f === B.WATER) water.push(sx, sy);
+        else if (f) drawBlock(f, sx, sy);
+      }
+    }
+    return water;
+  }
+
+  function drawCursor() {
+    if (!mouse.over) return;
+    const { cx, cy } = cellAt();
+    const tool = TOOLS[selected];
+    ctx.save();
+    if (tool.type === 'stamp') {
+      const baseY = isSolid(cx, cy) ? cy - 1 : cy;
+      const box = tool.id === 'tree'
+        ? { x: cx - 2, y: baseY - 7, w: 5, h: 8 }
+        : { x: cx - 5, y: baseY - 10, w: 11, h: 12 };
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.fillRect(box.x * BS - camX, box.y * BS - camY, box.w * BS, box.h * BS);
+      ctx.setLineDash([8, 6]);
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(box.x * BS - camX + 1, box.y * BS - camY + 1, box.w * BS - 2, box.h * BS - 2);
+    } else {
+      ctx.strokeStyle = tool.type === 'break' ? '#ff5b5b' : (bgMode ? '#ffd23a' : '#ffffff');
+      ctx.lineWidth = 2;
+      ctx.strokeRect(cx * BS - camX + 1, cy * BS - camY + 1, BS - 2, BS - 2);
+    }
+    ctx.restore();
+  }
+
+  function render(t) {
+    // la telecamera segue il giocatore
+    camX = Math.round(Math.max(0, Math.min(WW * BS - CW, (player.x + player.w / 2) * BS - CW / 2)));
+    camY = Math.round(Math.max(0, Math.min(WH * BS - CH, (player.y + player.h / 2) * BS - CH / 2)));
+
+    ctx.imageSmoothingEnabled = false;
+    drawSky(t);
+    const water = drawWorld();
+    drawPlayer();
+    // l'acqua si disegna sopra al giocatore, così sembra che ci sia dentro
+    for (let i = 0; i < water.length; i += 2) drawBlock(B.WATER, water[i], water[i + 1]);
+    drawCursor();
+  }
+
+  // ---------- Ciclo di gioco ----------
+  let last = null;
+  function loop(t) {
+    const dt = last === null ? 0 : Math.min(0.05, (t - last) / 1000);
+    last = t;
+    const steps = Math.max(1, Math.ceil(dt / 0.012));
+    for (let i = 0; i < steps; i++) stepPlayer(dt / steps);
+    render(t);
+    requestAnimationFrame(loop);
+  }
+
+  if (!loadWorld()) generate();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "jose-margareth-sala-giochi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sala Giochi di José e Margareth: Ping Pong e PixelCraft",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

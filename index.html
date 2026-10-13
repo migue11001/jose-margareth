@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sala Giochi</title>
+<style>
+  :root {
+    --bg: #0f1220;
+    --panel: #1a1f36;
+    --panel-2: #222844;
+    --border: #2a3155;
+    --text: #e8ebf7;
+    --muted: #8a91b4;
+    --accent: #4f7cff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: 32px 16px 48px;
+  }
+  main { max-width: 960px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 32px; }
+  h1 {
+    margin: 0;
+    font-size: 2.4rem;
+    letter-spacing: 1px;
+    animation: slow-blink 2.4s ease-in-out infinite;
+  }
+  header p { margin: 8px 0 0; color: var(--muted); }
+
+  @keyframes slow-blink {
+    0%, 100% {
+      opacity: 1;
+      text-shadow: 0 0 6px var(--glow, currentColor), 0 0 14px var(--glow, currentColor), 0 0 24px var(--glow, currentColor);
+    }
+    50% { opacity: .3; text-shadow: none; }
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+    transition: transform .15s, box-shadow .15s, border-color .15s;
+  }
+  a.card:hover, a.card:focus-visible {
+    transform: translateY(-4px);
+    border-color: var(--card-color);
+    box-shadow: 0 0 18px var(--card-color), 0 0 36px color-mix(in srgb, var(--card-color) 40%, transparent);
+    outline: none;
+  }
+
+  .cover {
+    height: 150px;
+    display: grid;
+    place-items: center;
+    font-size: 4rem;
+    background: var(--cover);
+  }
+
+  .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .body h2 { margin: 0; font-size: 1.3rem; }
+  .body p { margin: 0; color: var(--muted); font-size: .92rem; line-height: 1.45; flex: 1; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-size: .75rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--panel-2);
+    color: var(--muted);
+  }
+
+  .play {
+    margin-top: 6px;
+    align-self: flex-start;
+    background: var(--card-color);
+    color: #fff;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 8px;
+    --glow: #fff;
+  }
+  .play span { animation: slow-blink 2.4s ease-in-out infinite; }
+
+  /* schede dei giochi che arriveranno */
+  .card.soon { border-style: dashed; }
+  .card.soon .cover {
+    background: repeating-linear-gradient(45deg, #161a2e 0 14px, #1b2038 14px 28px);
+    color: #3a4270;
+    font-weight: 900;
+  }
+  .card.soon .body h2 { color: var(--muted); }
+  .badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    font-size: .75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #2a3155;
+    color: var(--text);
+  }
+
+  footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 36px; }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 1.9rem; }
+    .cover { height: 120px; font-size: 3.2rem; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>🎮 Sala Giochi</h1>
+    <p>Scegli un gioco per iniziare</p>
+  </header>
+
+  <section class="grid" id="games"></section>
+
+  <footer>Nuovi giochi in arrivo!</footer>
+</main>
+
+<script>
+  // Elenco dei giochi: per aggiungerne uno nuovo basta aggiungere un oggetto qui.
+  // Se "file" è vuoto la scheda compare come "In arrivo".
+  const GAMES = [
+    {
+      title: 'Ping Pong',
+      emoji: '🏓',
+      file: 'pingpong.html',
+      description: 'Sfida un amico sulla stessa tastiera. Arriva a 10 punti, scegli tra 22 colori della pallina e attento ai tiri super veloci!',
+      tags: ['2 giocatori', 'Tastiera / Touch', '40 min'],
+      color: '#4f7cff',
+      cover: 'linear-gradient(135deg, #1a2a6c, #4f7cff 55%, #a24bff)',
+    },
+    {
+      title: 'PixelCraft',
+      emoji: '⛏️',
+      file: 'pixelcraft.html',
+      description: 'Un mondo a pixel tutto da costruire: piazza e rompi blocchi, crea case e pianta alberi con un clic, vola sopra le colline.',
+      tags: ['1 giocatore', 'Costruzione', 'Mouse / Touch'],
+      color: '#5fa83a',
+      cover: 'linear-gradient(180deg, #7ec8ff 0 48%, #5fa83a 48% 58%, #866043 58% 82%, #7d7d7d 82%)',
+    },
+    { title: 'Gioco 3', emoji: '?', file: '', description: 'Un nuovo gioco arriverà presto in questa scheda.', tags: [] },
+    { title: 'Gioco 4', emoji: '?', file: '', description: 'Un nuovo gioco arriverà presto in questa scheda.', tags: [] },
+  ];
+
+  const grid = document.getElementById('games');
+
+  GAMES.forEach(game => {
+    const available = Boolean(game.file);
+    const card = document.createElement(available ? 'a' : 'div');
+    card.className = 'card' + (available ? '' : ' soon');
+    if (available) {
+      card.href = game.file;
+      card.style.setProperty('--card-color', game.color);
+      card.style.setProperty('--cover', game.cover);
+    }
+
+    const cover = document.createElement('div');
+    cover.className = 'cover';
+    cover.textContent = game.emoji;
+    card.appendChild(cover);
+
+    if (!available) {
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = 'In arrivo';
+      card.appendChild(badge);
+    }
+
+    const body = document.createElement('div');
+    body.className = 'body';
+
+    const h2 = document.createElement('h2');
+    h2.textContent = game.title;
+    body.appendChild(h2);
+
+    if (game.tags.length) {
+      const tags = document.createElement('div');
+      tags.className = 'tags';
+      game.tags.forEach(t => {
+        const tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.textContent = t;
+        tags.appendChild(tag);
+      });
+      body.appendChild(tags);
+    }
+
+    const p = document.createElement('p');
+    p.textContent = game.description;
+    body.appendChild(p);
+
+    if (available) {
+      const play = document.createElement('span');
+      play.className = 'play';
+      play.innerHTML = '<span>▶ Gioca</span>';
+      body.appendChild(play);
+    }
+
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+</script>
+</body>
+</html>

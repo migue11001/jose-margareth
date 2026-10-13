@@ -93,6 +93,9 @@ Purple · Sky Blue · Turquoise · Gold · Brown
 |--------|---------|-----------------|
 | **Spider-Man** | Maschera rossa con ragnatela nera, occhi bianchi e parte bassa blu | Rossa con la ragnatela nera e la parte bassa blu |
 | **Iron Man** | Elmo rosso metallico con maschera dorata e occhi azzurri luminosi che pulsano | Rosso metallico con un riflesso dorato che scorre |
+| **Captain America** | Lo scudo con gli anelli rossi e bianchi e la stella bianca su fondo blu, che gira | Bandiera: fascia blu con le stelle sopra, strisce rosse e bianche sotto |
+| **Thor** | Sfera di tempesta con il martello d'argento che ruota e fulmini azzurri tutto intorno | Argento del martello, con lampi e fulmini azzurri che cadono dall'alto |
+| **Hulk** | Faccia verde arrabbiata con capelli neri e denti stretti, che trema | Verde con i pantaloncini viola in basso, e la scritta trema |
 
 ### 💎 Colori minerali
 

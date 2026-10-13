@@ -753,6 +753,8 @@
     winner = null;
     timeLeft = GAME_TIME;
     confetti.length = 0;
+    winStartedAt = null;
+    winBolts = [];
     resetBall(Math.random() < 0.5 ? 1 : -1);
   }
 
@@ -1472,6 +1474,10 @@
   // pallina thor: sfera di tempesta con il martello d'argento e fulmini azzurri
   let thorBolts = [];
   let ballBolts = [];
+  // schermata YOU WIN: quando è comparsa, quanto dura la rotazione, fulmini della scritta
+  let winStartedAt = null;
+  const WIN_SPIN_MS = 3000;
+  let winBolts = [];
   function drawThor(x, y, r, t) {
     if (Math.random() < 0.22) {
       const a = Math.random() * Math.PI * 2;
@@ -1997,10 +2003,18 @@
     drawConfetti();
     ctx.textAlign = 'center';
 
-    // "YOU WIN" del colore della pallina, con bordo giallo, leggermente pulsante
-    const scale = 1 + Math.sin(performance.now() / 200) * 0.05;
+    // "YOU WIN" del colore della pallina, con bordo giallo, leggermente pulsante.
+    // Per i primi 3 secondi gira su sé stessa (3 giri che rallentano), poi resta ferma e spara fulmini.
+    const now = performance.now();
+    if (winStartedAt === null) winStartedAt = now;
+    const spinT = Math.min(1, (now - winStartedAt) / WIN_SPIN_MS);
+    const spinAngle = Math.PI * 6 * Math.pow(1 - spinT, 3);
+    const scale = 1 + Math.sin(now / 200) * 0.05;
     ctx.save();
-    ctx.translate(W / 2, H / 2 - 20);
+    // la scritta gira intorno al suo centro (36 px sopra la linea di base del testo)
+    ctx.translate(W / 2, H / 2 - 56);
+    ctx.rotate(spinAngle);
+    ctx.translate(0, 36);
     if (ballColor === 'hulk') ctx.translate((Math.random() - 0.5) * 8, (Math.random() - 0.5) * 6);
     ctx.scale(scale, scale);
     ctx.font = '900 96px Impact, "Arial Black", system-ui, sans-serif';
@@ -2157,6 +2171,23 @@
       }
       cursedBolts = drawBolts(cursedBolts);
     }
+
+    // finita la rotazione, la scritta spara fulmini del colore della pallina in tutte le direzioni
+    if (spinT >= 1) {
+      if (Math.random() < 0.45) {
+        const sx = W / 2 + (Math.random() - 0.5) * 400;
+        const sy = H / 2 - 56 + (Math.random() - 0.5) * 70;
+        const a = Math.atan2(sy - (H / 2 - 56), sx - W / 2) + (Math.random() - 0.5) * 0.8;
+        const len = 70 + Math.random() * 110;
+        const b = makeBolt(sx, sy, sx + Math.cos(a) * len, sy + Math.sin(a) * len, 7);
+        const col = currentColor(hue);
+        b.color = col;
+        b.glow = col;
+        b.width = 2.5;
+        winBolts.push(b);
+      }
+    }
+    winBolts = drawBolts(winBolts);
 
     // Thor: fulmini azzurri e bianchi che cadono dall'alto sulla scritta
     if (ballColor === 'thor') {

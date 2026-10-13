@@ -122,6 +122,15 @@ Colombia · Italy · Bolivia · England · USA · France · Spain · Germany · 
 - **Scia, sfondo del campo e luce:** i colori della bandiera.
 - **Scritta YOU WIN:** la bandiera dentro le lettere.
 
+### 🍂 Colori delle stagioni
+
+| Colore | Pallina | Scritta YOU WIN |
+|--------|---------|-----------------|
+| **Summer** (Estate) | Un sole con i raggi che girano e scintille dorate che salgono | Dal giallo all'arancione al rosa, come un tramonto |
+| **Winter** (Inverno) | Sfera di ghiaccio con un cristallo bianco che gira e fiocchi di neve che cadono | Dal bianco all'azzurro ghiaccio |
+| **Autumn** (Autunno) | Pallina arancione con una foglia che ondeggia e foglie colorate che cadono | Dal giallo all'arancione al rosso e marrone |
+| **Spring** (Primavera) | Pallina verde con un fiore rosa che gira e petali che volano | Fiori rosa in alto, prato verde in basso |
+
 ### 💥 Ultra Color
 
 | Colore | Pallina | Scritta YOU WIN |
@@ -150,4 +159,4 @@ Per aggiungere un nuovo colore semplice basta aggiungere una riga all'elenco `CO
 { id: 'menta', label: 'Mint', value: '#3dffb0' },
 ```
 
-Il pulsante comparirà nella sezione **Colori originali 2**, e il nuovo colore entrerà automaticamente anche nel giro di **Ultra**. Per metterlo in un'altra sezione, aggiungi il suo `id` all'elenco `ORIGINAL`, `SPECIAL`, `ELEMENTAL`, `HERO`, `MINERAL` o `ULTRA` (per una nuova bandiera basta aggiungerla all'elenco `FLAGS`).
+Il pulsante comparirà nella sezione **Colori originali 2**, e il nuovo colore entrerà automaticamente anche nel giro di **Ultra**. Per metterlo in un'altra sezione, aggiungi il suo `id` all'elenco `ORIGINAL`, `SPECIAL`, `ELEMENTAL`, `HERO`, `MINERAL`, `SEASONS` o `ULTRA` (per una nuova bandiera basta aggiungerla all'elenco `FLAGS`).

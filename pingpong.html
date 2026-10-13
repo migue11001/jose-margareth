@@ -51,10 +51,10 @@
   /* le sezioni dei colori stanno una accanto all'altra, come colonne */
   .palette {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 8px;
     width: 100%;
-    max-width: 960px;
+    max-width: 1080px;
     align-items: start;
   }
   .colors {
@@ -252,6 +252,38 @@
     color: #fff;
     text-shadow: 0 0 3px #00331a, 0 0 3px #00331a;
   }
+  .summer-bg {
+    background:
+      radial-gradient(circle at 18% 45%, #fff3b0 0 5px, #ffd60a 6px 9px, transparent 10px),
+      linear-gradient(180deg, #3fa7d6 0 55%, #ffd166 55%);
+    color: #fff;
+    text-shadow: 0 0 3px #7a3b00, 0 0 3px #7a3b00;
+  }
+  .winter-bg {
+    background:
+      radial-gradient(circle at 20% 30%, #fff 0 1.5px, transparent 2.5px),
+      radial-gradient(circle at 70% 70%, #fff 0 1.5px, transparent 2.5px),
+      radial-gradient(circle at 85% 25%, #fff 0 1px, transparent 2px),
+      linear-gradient(180deg, #a8dadc, #457b9d 70%, #1d3557);
+    color: #fff;
+    text-shadow: 0 0 3px #0b2340, 0 0 3px #0b2340;
+  }
+  .autumn-bg {
+    background:
+      radial-gradient(ellipse 5px 3px at 18% 35%, #c1121f 98%, transparent),
+      radial-gradient(ellipse 5px 3px at 80% 65%, #ffb703 98%, transparent),
+      linear-gradient(135deg, #ffb703, #f77f00 50%, #9c2c00);
+    color: #fff;
+    text-shadow: 0 0 3px #4a1500, 0 0 3px #4a1500;
+  }
+  .spring-bg {
+    background:
+      radial-gradient(circle at 16% 40%, #ffd23a 0 1.5px, #ff8fc8 2.5px 4.5px, transparent 5.5px),
+      radial-gradient(circle at 84% 60%, #ffd23a 0 1.5px, #ffffff 2.5px 4.5px, transparent 5.5px),
+      linear-gradient(180deg, #a8e6a1, #7bc950 60%, #3a8a2a);
+    color: #fff;
+    text-shadow: 0 0 3px #1f4d12, 0 0 3px #1f4d12;
+  }
   .ultra-bg {
     background: conic-gradient(#ff3b3b, #ff8c1a, #ffe14b, #2ee66b, #1de9c9, #3b7bff, #a24bff, #ff6fc8, #ff3b3b);
     color: #fff;
@@ -371,6 +403,10 @@
     <span data-i18n="sec.flags">🚩 Flags Color</span>
   </div>
 
+  <div class="colors special" id="season-colors">
+    <span data-i18n="sec.seasons">🍂 Colori delle stagioni</span>
+  </div>
+
   <div class="colors special" id="ultra-colors">
     <span data-i18n="sec.ultra">💥 Ultra Color</span>
   </div>
@@ -450,6 +486,10 @@
     { id: 'spagna',     label: 'Spain',       value: 'flag-spagna' },
     { id: 'germania',   label: 'Germany',     value: 'flag-germania' },
     { id: 'svizzera',   label: 'Switzerland', value: 'flag-svizzera' },
+    { id: 'estate',     label: 'Summer',      value: 'summer' },
+    { id: 'inverno',    label: 'Winter',      value: 'winter' },
+    { id: 'autunno',    label: 'Autumn',      value: 'autumn' },
+    { id: 'primavera',  label: 'Spring',      value: 'spring' },
     { id: 'ultra',      label: 'Ultra',       value: 'ultra' },
   ];
 
@@ -574,6 +614,7 @@
     captain: '#3b6bff', thor: '#7ec8ff', hulk: '#5fd13a',
   };
   Object.keys(FLAGS).forEach(id => { GLOW[id] = FLAGS[id].glow; });
+  Object.assign(GLOW, { estate: '#ffb703', inverno: '#bfe8ff', autunno: '#f77f00', primavera: '#ff8fc8' });
 
   // Color buttons divisi in sezioni: originali, altri, speciali
   const ORIGINAL = ['rosso', 'blu', 'verde', 'rosa', 'giallo', 'arancione', 'bianco'];
@@ -585,6 +626,8 @@
   const MINERAL = ['diamante', 'smeraldo', 'ametista', 'netherite', 'rame', 'oro'];
   const mineralEl = document.getElementById('mineral-colors');
   const FLAG_IDS = Object.keys(FLAGS);
+  const SEASONS = ['estate', 'inverno', 'autunno', 'primavera'];
+  const seasonEl = document.getElementById('season-colors');
   const flagEl = document.getElementById('flag-colors');
   const ULTRA = ['ultra'];
   const ultraEl = document.getElementById('ultra-colors');
@@ -622,6 +665,10 @@
     else if (c.value === 'water') b.classList.add('water-bg');
     else if (c.value === 'earth') b.classList.add('earth-bg');
     else if (c.value === 'snow') b.classList.add('snow-bg');
+    else if (c.value === 'summer') b.classList.add('summer-bg');
+    else if (c.value === 'winter') b.classList.add('winter-bg');
+    else if (c.value === 'autumn') b.classList.add('autumn-bg');
+    else if (c.value === 'spring') b.classList.add('spring-bg');
     else if (flagId(c.value)) {
       b.style.background = `url(${flagTex(flagId(c.value), 120, 60).toDataURL()}) center / cover`;
       b.classList.add('flag-btn');
@@ -641,6 +688,7 @@
                   : HERO.includes(c.id) ? heroEl
                   : MINERAL.includes(c.id) ? mineralEl
                   : FLAG_IDS.includes(c.id) ? flagEl
+                  : SEASONS.includes(c.id) ? seasonEl
                   : ULTRA.includes(c.id) ? ultraEl
                   : colorsEl;
     section.appendChild(b);
@@ -772,6 +820,10 @@
     if (ballColor === 'cursed') return cursedOn() ? '#ff1a1a' : '#5a0000';
     if (ballColor === 'cyborg') return cyborgOn() ? '#5ff3ff' : '#1e5bff';
     if (ballColor === 'diamond') return Math.floor(h / 20) % 3 ? '#4ff0ff' : '#e9feff';
+    if (ballColor === 'summer') return Math.floor(h / 20) % 2 ? '#ffd60a' : '#ff9e00';
+    if (ballColor === 'winter') return Math.floor(h / 20) % 2 ? '#bfe8ff' : '#ffffff';
+    if (ballColor === 'autumn') return ['#f77f00', '#c1121f', '#ffb703'][Math.floor(h / 20) % 3];
+    if (ballColor === 'spring') return Math.floor(h / 20) % 2 ? '#ff8fc8' : '#7bc950';
     if (flagId(ballColor)) {
       const f = FLAGS[flagId(ballColor)];
       return f.colors[Math.floor(h / 20) % f.colors.length];
@@ -1077,6 +1129,148 @@
     emerald: { light: '#9dffd0', mid: '#11c26d', dark: '#064d29', facet: 'rgba(200,255,225,0.7)', glow: '#50e3a4' },
     amethyst: { light: '#f0dcff', mid: '#9b5de5', dark: '#3c1a6b', facet: 'rgba(245,225,255,0.75)', glow: '#b57bff' },
   };
+
+  // ---------- Stagioni ----------
+  // particelle che escono dalla pallina: scintille (estate), neve (inverno), foglie (autunno), petali (primavera)
+  let seasonParticles = [];
+  const PARTICLE_COLORS = {
+    spark: ['#fff3b0', '#ffd60a', '#ffb703'],
+    snow: ['#ffffff', '#e6f6ff'],
+    leaf: ['#f77f00', '#c1121f', '#ffb703', '#9c2c00'],
+    petal: ['#ff8fc8', '#ffc2e0', '#ffffff'],
+  };
+
+  function spawnSeasonParticle(x, y, r, kind) {
+    const cols = PARTICLE_COLORS[kind];
+    seasonParticles.push({
+      x: x + (Math.random() - 0.5) * r * 2,
+      y: y + (Math.random() - 0.5) * r * 2,
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: kind === 'spark' ? -0.4 - Math.random() * 0.6 : 0.4 + Math.random() * 0.7,
+      rot: Math.random() * Math.PI * 2,
+      vr: (Math.random() - 0.5) * 0.2,
+      life: 0,
+      max: 50 + Math.random() * 40,
+      kind,
+      color: cols[Math.floor(Math.random() * cols.length)],
+      size: kind === 'snow' ? 1.5 + Math.random() * 1.5 : 2 + Math.random() * 2,
+    });
+  }
+
+  function drawSeasonParticles() {
+    if (!seasonParticles.length) return;
+    ctx.save();
+    seasonParticles.forEach(p => {
+      p.life++;
+      p.x += p.vx + (p.kind === 'spark' ? 0 : Math.sin(p.life / 8 + p.rot) * 0.4);
+      p.y += p.vy;
+      p.rot += p.vr;
+      ctx.globalAlpha = Math.max(0, 1 - p.life / p.max);
+      ctx.fillStyle = p.color;
+      if (p.kind === 'snow' || p.kind === 'spark') {
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+      } else {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.beginPath(); ctx.ellipse(0, 0, p.size * 1.6, p.size * 0.8, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      }
+    });
+    ctx.restore();
+    seasonParticles = seasonParticles.filter(p => p.life < p.max);
+  }
+
+  function seasonBase(x, y, r, glow, stops) {
+    ctx.translate(x, y);
+    ctx.shadowColor = glow;
+    ctx.shadowBlur = 16;
+    const g = ctx.createRadialGradient(-r / 3, -r / 3, 0, 0, 0, r);
+    stops.forEach((c, i) => g.addColorStop(i / (stops.length - 1), c));
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+
+  // estate: un sole con i raggi che girano e scintille che salgono
+  function drawSummer(x, y, r, t) {
+    if (Math.random() < 0.3) spawnSeasonParticle(x, y, r, 'spark');
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(t / 700);
+    ctx.fillStyle = '#ffb703';
+    ctx.shadowColor = '#ffb703';
+    ctx.shadowBlur = 12;
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(a - 0.22) * r * 0.9, Math.sin(a - 0.22) * r * 0.9);
+      ctx.lineTo(Math.cos(a) * r * 1.45, Math.sin(a) * r * 1.45);
+      ctx.lineTo(Math.cos(a + 0.22) * r * 0.9, Math.sin(a + 0.22) * r * 0.9);
+      ctx.fill();
+    }
+    ctx.restore();
+    ctx.save();
+    seasonBase(x, y, r * 0.95, '#ffb703', ['#fff3b0', '#ffd60a', '#ff9e00']);
+    ctx.restore();
+  }
+
+  // inverno: sfera di ghiaccio con un cristallo bianco e neve che cade
+  function drawWinter(x, y, r, t) {
+    if (Math.random() < 0.3) spawnSeasonParticle(x, y, r, 'snow');
+    ctx.save();
+    seasonBase(x, y, r, '#bfe8ff', ['#ffffff', '#bfe8ff', '#4a90d9']);
+    ctx.rotate(t / 1500);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const a = (i / 6) * Math.PI * 2;
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.cos(a) * r * 0.8, Math.sin(a) * r * 0.8);
+      const mx = Math.cos(a) * r * 0.5, my = Math.sin(a) * r * 0.5;
+      ctx.moveTo(mx, my); ctx.lineTo(mx + Math.cos(a + 0.7) * r * 0.25, my + Math.sin(a + 0.7) * r * 0.25);
+      ctx.moveTo(mx, my); ctx.lineTo(mx + Math.cos(a - 0.7) * r * 0.25, my + Math.sin(a - 0.7) * r * 0.25);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // autunno: pallina arancione con una foglia che ondeggia e foglie che cadono
+  function drawAutumn(x, y, r, t) {
+    if (Math.random() < 0.25) spawnSeasonParticle(x, y, r, 'leaf');
+    ctx.save();
+    seasonBase(x, y, r, '#f77f00', ['#ffd166', '#f77f00', '#9c2c00']);
+    ctx.rotate(Math.sin(t / 400) * 0.5);
+    ctx.fillStyle = '#b5301a';
+    ctx.beginPath();
+    ctx.moveTo(0, -r * 0.7);
+    ctx.quadraticCurveTo(r * 0.6, -r * 0.2, 0, r * 0.45);
+    ctx.quadraticCurveTo(-r * 0.6, -r * 0.2, 0, -r * 0.7);
+    ctx.fill();
+    ctx.strokeStyle = '#6b1a0c';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath(); ctx.moveTo(0, -r * 0.55); ctx.lineTo(0, r * 0.75); ctx.stroke();
+    ctx.restore();
+  }
+
+  // primavera: pallina verde con un fiore rosa che gira e petali che volano
+  function drawSpring(x, y, r, t) {
+    if (Math.random() < 0.25) spawnSeasonParticle(x, y, r, 'petal');
+    ctx.save();
+    seasonBase(x, y, r, '#ff8fc8', ['#d8f5c0', '#7bc950', '#3a8a2a']);
+    ctx.rotate(t / 900);
+    ctx.fillStyle = '#ff8fc8';
+    for (let i = 0; i < 5; i++) {
+      const a = (i / 5) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.ellipse(Math.cos(a) * r * 0.38, Math.sin(a) * r * 0.38, r * 0.3, r * 0.18, a, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.fillStyle = '#ffd23a';
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.2, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
 
   // pallina bandiera: la bandiera dentro la pallina, che ondeggia piano, con un riflesso lucido
   function drawFlagBall(x, y, r, t, id) {
@@ -1506,6 +1700,10 @@
     netherite: ['#2a2426', '#4a4245', '#6b4f4a'],
     copper:    ['#b5532a', '#e07b4a', '#4fb8a0'],
     gold:      ['#b8860b', '#ffd84a', '#b8860b'],
+    summer:    ['#3fa7d6', '#ffb703', '#ff7b00'],
+    winter:    ['#1d3557', '#a8dadc', '#457b9d'],
+    autumn:    ['#9c2c00', '#f77f00', '#6b3e26'],
+    spring:    ['#7bc950', '#ff8fc8', '#a8e6a1'],
   };
   const BG_FADE = 700; // ms per passare dai colori vecchi ai nuovi
 
@@ -1603,6 +1801,9 @@
     });
     ctx.globalAlpha = 1;
 
+    // particelle delle stagioni
+    drawSeasonParticles();
+
     // pallina
     const col = currentColor(hue);
     ctx.save();
@@ -1632,6 +1833,14 @@
       drawMetal(ball.x, ball.y, BALL_R, performance.now(), ballColor);
     } else if (flagId(ballColor)) {
       drawFlagBall(ball.x, ball.y, BALL_R, performance.now(), flagId(ballColor));
+    } else if (ballColor === 'summer') {
+      drawSummer(ball.x, ball.y, BALL_R, performance.now());
+    } else if (ballColor === 'winter') {
+      drawWinter(ball.x, ball.y, BALL_R, performance.now());
+    } else if (ballColor === 'autumn') {
+      drawAutumn(ball.x, ball.y, BALL_R, performance.now());
+    } else if (ballColor === 'spring') {
+      drawSpring(ball.x, ball.y, BALL_R, performance.now());
     } else if (ballColor === 'candy') {
       drawCandy(ball.x, ball.y, BALL_R, performance.now() / 200);
     } else if (ballColor === 'lava') {
@@ -1815,6 +2024,17 @@
       g.addColorStop(clamp(shine, 0, 1), '#ffd98a');
       g.addColorStop(clamp(shine + 0.08, 0, 1), '#c8102e');
       g.addColorStop(1, '#8a0a10');
+      ctx.fillStyle = g;
+    } else if (['summer', 'winter', 'autumn', 'spring'].includes(ballColor)) {
+      // sfumatura della stagione, dall'alto in basso
+      const STOPS = {
+        summer: ['#fff3b0', '#ffd60a', '#ff9e00', '#ff4f8b'],
+        winter: ['#ffffff', '#e6f6ff', '#a8dadc', '#4a90d9'],
+        autumn: ['#ffd166', '#f77f00', '#c1121f', '#6b1a0c'],
+        spring: ['#ffd6ea', '#ff8fc8', '#7bc950', '#3a8a2a'],
+      }[ballColor];
+      const g = ctx.createLinearGradient(0, -80, 0, 10);
+      STOPS.forEach((c, i) => g.addColorStop(i / (STOPS.length - 1), c));
       ctx.fillStyle = g;
     } else if (flagId(ballColor)) {
       // la bandiera dentro le lettere

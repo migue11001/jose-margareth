@@ -133,6 +133,13 @@ Colombia · Italy · Bolivia · England · USA · France · Spain · Germany · 
 | **Autumn** (Autunno) | Pallina arancione con una foglia che ondeggia e foglie colorate che cadono | Dal giallo all'arancione al rosso e marrone |
 | **Spring** (Primavera) | Pallina verde con un fiore rosa che gira e petali che volano | Fiori rosa in alto, prato verde in basso |
 
+### 🦔 Hedgehog Colors
+
+| Colore | Pallina | Scritta YOU WIN |
+|--------|---------|-----------------|
+| **Sonic** | Una palla blu di aculei che gira velocissima (spin dash), con strisce bianche e anelli d'oro che cadono | Blu, dal celeste al blu scuro |
+| **Shadow** | Una palla nera di aculei con le strisce rosse, bagliore rosso e scintille rosse che salgono | Nera con la fascia rossa degli aculei |
+
 ### 💥 Ultra Color
 
 | Colore | Pallina | Scritta YOU WIN |
@@ -161,4 +168,4 @@ Per aggiungere un nuovo colore semplice basta aggiungere una riga all'elenco `CO
 { id: 'menta', label: 'Mint', value: '#3dffb0' },
 ```
 
-Il pulsante comparirà nella sezione **Colori originali 2**, e il nuovo colore entrerà automaticamente anche nel giro di **Ultra**. Per metterlo in un'altra sezione, aggiungi il suo `id` all'elenco `ORIGINAL`, `SPECIAL`, `ELEMENTAL`, `HERO`, `MINERAL`, `SEASONS` o `ULTRA` (per una nuova bandiera basta aggiungerla all'elenco `FLAGS`).
+Il pulsante comparirà nella sezione **Colori originali 2**, e il nuovo colore entrerà automaticamente anche nel giro di **Ultra**. Per metterlo in un'altra sezione, aggiungi il suo `id` all'elenco `ORIGINAL`, `SPECIAL`, `ELEMENTAL`, `HERO`, `MINERAL`, `SEASONS`, `HEDGEHOGS` o `ULTRA` (per una nuova bandiera basta aggiungerla all'elenco `FLAGS`).

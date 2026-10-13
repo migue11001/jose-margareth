@@ -51,7 +51,7 @@
   /* le sezioni dei colori stanno una accanto all'altra, come colonne */
   .palette {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
     gap: 8px;
     width: 100%;
     max-width: 1080px;
@@ -252,6 +252,20 @@
     color: #fff;
     text-shadow: 0 0 3px #00331a, 0 0 3px #00331a;
   }
+  .sonic-bg {
+    background:
+      linear-gradient(100deg, transparent 0 30%, rgba(255,255,255,.55) 32% 35%, transparent 37% 55%, rgba(255,255,255,.35) 57% 59%, transparent 61%),
+      linear-gradient(180deg, #4f8bff, #1f5fd6 60%, #0b2d7a);
+    color: #fff;
+    text-shadow: 0 0 3px #071a4a, 0 0 3px #071a4a;
+  }
+  .shadow-bg {
+    background:
+      linear-gradient(100deg, transparent 0 28%, #e63946 30% 36%, transparent 38% 60%, #e63946 62% 66%, transparent 68%),
+      linear-gradient(180deg, #3a3a3a, #111 70%);
+    color: #fff;
+    text-shadow: 0 0 3px #000, 0 0 3px #000;
+  }
   .summer-bg {
     background:
       radial-gradient(circle at 18% 45%, #fff3b0 0 5px, #ffd60a 6px 9px, transparent 10px),
@@ -407,6 +421,10 @@
     <span data-i18n="sec.seasons">🍂 Colori delle stagioni</span>
   </div>
 
+  <div class="colors special" id="hedgehog-colors">
+    <span data-i18n="sec.hedgehog">🦔 Hedgehog Colors</span>
+  </div>
+
   <div class="colors special" id="ultra-colors">
     <span data-i18n="sec.ultra">💥 Ultra Color</span>
   </div>
@@ -490,6 +508,8 @@
     { id: 'inverno',    label: 'Winter',      value: 'winter' },
     { id: 'autunno',    label: 'Autumn',      value: 'autumn' },
     { id: 'primavera',  label: 'Spring',      value: 'spring' },
+    { id: 'sonic',      label: 'Sonic',       value: 'sonic' },
+    { id: 'shadow',     label: 'Shadow',      value: 'shadow' },
     { id: 'ultra',      label: 'Ultra',       value: 'ultra' },
   ];
 
@@ -615,6 +635,7 @@
   };
   Object.keys(FLAGS).forEach(id => { GLOW[id] = FLAGS[id].glow; });
   Object.assign(GLOW, { estate: '#ffb703', inverno: '#bfe8ff', autunno: '#f77f00', primavera: '#ff8fc8' });
+  Object.assign(GLOW, { sonic: '#4f8bff', shadow: '#ff3b3b' });
 
   // Color buttons divisi in sezioni: originali, altri, speciali
   const ORIGINAL = ['rosso', 'blu', 'verde', 'rosa', 'giallo', 'arancione', 'bianco'];
@@ -628,6 +649,8 @@
   const FLAG_IDS = Object.keys(FLAGS);
   const SEASONS = ['estate', 'inverno', 'autunno', 'primavera'];
   const seasonEl = document.getElementById('season-colors');
+  const HEDGEHOGS = ['sonic', 'shadow'];
+  const hedgehogEl = document.getElementById('hedgehog-colors');
   const flagEl = document.getElementById('flag-colors');
   const ULTRA = ['ultra'];
   const ultraEl = document.getElementById('ultra-colors');
@@ -665,6 +688,8 @@
     else if (c.value === 'water') b.classList.add('water-bg');
     else if (c.value === 'earth') b.classList.add('earth-bg');
     else if (c.value === 'snow') b.classList.add('snow-bg');
+    else if (c.value === 'sonic') b.classList.add('sonic-bg');
+    else if (c.value === 'shadow') b.classList.add('shadow-bg');
     else if (c.value === 'summer') b.classList.add('summer-bg');
     else if (c.value === 'winter') b.classList.add('winter-bg');
     else if (c.value === 'autumn') b.classList.add('autumn-bg');
@@ -689,6 +714,7 @@
                   : MINERAL.includes(c.id) ? mineralEl
                   : FLAG_IDS.includes(c.id) ? flagEl
                   : SEASONS.includes(c.id) ? seasonEl
+                  : HEDGEHOGS.includes(c.id) ? hedgehogEl
                   : ULTRA.includes(c.id) ? ultraEl
                   : colorsEl;
     section.appendChild(b);
@@ -822,6 +848,8 @@
     if (ballColor === 'cursed') return cursedOn() ? '#ff1a1a' : '#5a0000';
     if (ballColor === 'cyborg') return cyborgOn() ? '#5ff3ff' : '#1e5bff';
     if (ballColor === 'diamond') return Math.floor(h / 20) % 3 ? '#4ff0ff' : '#e9feff';
+    if (ballColor === 'sonic') return Math.floor(h / 16) % 2 ? '#4f8bff' : '#1f5fd6';
+    if (ballColor === 'shadow') return Math.floor(h / 16) % 2 ? '#e63946' : '#2a2a2a';
     if (ballColor === 'summer') return Math.floor(h / 20) % 2 ? '#ffd60a' : '#ff9e00';
     if (ballColor === 'winter') return Math.floor(h / 20) % 2 ? '#bfe8ff' : '#ffffff';
     if (ballColor === 'autumn') return ['#f77f00', '#c1121f', '#ffb703'][Math.floor(h / 20) % 3];
@@ -1140,6 +1168,8 @@
     snow: ['#ffffff', '#e6f6ff'],
     leaf: ['#f77f00', '#c1121f', '#ffb703', '#9c2c00'],
     petal: ['#ff8fc8', '#ffc2e0', '#ffffff'],
+    ring: ['#ffd23a', '#ffe680'],
+    chaos: ['#ff3b3b', '#ff8a8a', '#ffd0d0'],
   };
 
   function spawnSeasonParticle(x, y, r, kind) {
@@ -1148,7 +1178,7 @@
       x: x + (Math.random() - 0.5) * r * 2,
       y: y + (Math.random() - 0.5) * r * 2,
       vx: (Math.random() - 0.5) * 0.8,
-      vy: kind === 'spark' ? -0.4 - Math.random() * 0.6 : 0.4 + Math.random() * 0.7,
+      vy: kind === 'spark' || kind === 'chaos' ? -0.4 - Math.random() * 0.6 : 0.4 + Math.random() * 0.7,
       rot: Math.random() * Math.PI * 2,
       vr: (Math.random() - 0.5) * 0.2,
       life: 0,
@@ -1164,12 +1194,19 @@
     ctx.save();
     seasonParticles.forEach(p => {
       p.life++;
-      p.x += p.vx + (p.kind === 'spark' ? 0 : Math.sin(p.life / 8 + p.rot) * 0.4);
+      p.x += p.vx + (p.kind === 'spark' || p.kind === 'chaos' || p.kind === 'ring' ? 0 : Math.sin(p.life / 8 + p.rot) * 0.4);
       p.y += p.vy;
       p.rot += p.vr;
       ctx.globalAlpha = Math.max(0, 1 - p.life / p.max);
       ctx.fillStyle = p.color;
-      if (p.kind === 'snow' || p.kind === 'spark') {
+      if (p.kind === 'ring') {
+        // anello d'oro che ruota (si vede più stretto quando è di taglio)
+        ctx.strokeStyle = p.color;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.ellipse(p.x, p.y, Math.max(0.6, Math.abs(Math.cos(p.rot * 2)) * 3.5), 3.5, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      } else if (p.kind === 'snow' || p.kind === 'spark' || p.kind === 'chaos') {
         ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
       } else {
         ctx.save();
@@ -1271,6 +1308,51 @@
     }
     ctx.fillStyle = '#ffd23a';
     ctx.beginPath(); ctx.arc(0, 0, r * 0.2, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+
+  // ---------- Ricci (Sonic e Shadow) ----------
+  // la pallina è uno "spin dash": una palla di aculei che gira velocissima
+  const HEDGEHOG_STYLE = {
+    sonic:  { body: '#1f5fd6', light: '#6fa8ff', swirl: 'rgba(255,255,255,0.85)', glow: '#4f8bff', particle: 'ring', chance: 0.07 },
+    shadow: { body: '#151515', light: '#4a4a4a', swirl: '#e63946', glow: '#ff3b3b', particle: 'chaos', chance: 0.3 },
+  };
+
+  function drawHedgehog(x, y, r, t, kind) {
+    const c = HEDGEHOG_STYLE[kind];
+    if (Math.random() < c.chance) spawnSeasonParticle(x, y, r, c.particle);
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(t / 45);
+    ctx.shadowColor = c.glow;
+    ctx.shadowBlur = 16;
+    // sagoma con gli aculei
+    ctx.fillStyle = c.body;
+    ctx.beginPath();
+    const spikes = 9;
+    for (let i = 0; i < spikes * 2; i++) {
+      const a = (i / (spikes * 2)) * Math.PI * 2;
+      const d = i % 2 ? r * 0.82 : r * 1.18;
+      if (i === 0) ctx.moveTo(Math.cos(a) * d, Math.sin(a) * d); else ctx.lineTo(Math.cos(a) * d, Math.sin(a) * d);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    // interno più chiaro
+    const g = ctx.createRadialGradient(-r * 0.3, -r * 0.3, 0, 0, 0, r * 0.85);
+    g.addColorStop(0, c.light);
+    g.addColorStop(1, c.body);
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.82, 0, Math.PI * 2); ctx.fill();
+    // strisce a spirale della rotazione
+    ctx.strokeStyle = c.swirl;
+    ctx.lineWidth = 1.4;
+    ctx.lineCap = 'round';
+    [[0.3, 0], [0.55, 2.1], [0.75, 4.2]].forEach(([rad, start]) => {
+      ctx.beginPath();
+      ctx.arc(0, 0, r * rad, start, start + 1.6);
+      ctx.stroke();
+    });
     ctx.restore();
   }
 
@@ -1711,6 +1793,8 @@
     winter:    ['#1d3557', '#a8dadc', '#457b9d'],
     autumn:    ['#9c2c00', '#f77f00', '#6b3e26'],
     spring:    ['#7bc950', '#ff8fc8', '#a8e6a1'],
+    sonic:     ['#1f5fd6', '#3fbf5f', '#4f8bff'],
+    shadow:    ['#111111', '#7a0f0f', '#2a2a2a'],
   };
   const BG_FADE = 700; // ms per passare dai colori vecchi ai nuovi
 
@@ -1858,6 +1942,8 @@
       drawMetal(ball.x, ball.y, BALL_R, performance.now(), ballColor);
     } else if (flagId(ballColor)) {
       drawFlagBall(ball.x, ball.y, BALL_R, performance.now(), flagId(ballColor));
+    } else if (ballColor === 'sonic' || ballColor === 'shadow') {
+      drawHedgehog(ball.x, ball.y, BALL_R, performance.now(), ballColor);
     } else if (ballColor === 'summer') {
       drawSummer(ball.x, ball.y, BALL_R, performance.now());
     } else if (ballColor === 'winter') {
@@ -2086,6 +2172,22 @@
       g.addColorStop(clamp(shine, 0, 1), '#ffd98a');
       g.addColorStop(clamp(shine + 0.08, 0, 1), '#c8102e');
       g.addColorStop(1, '#8a0a10');
+      ctx.fillStyle = g;
+    } else if (ballColor === 'sonic' || ballColor === 'shadow') {
+      // Sonic: blu con un riflesso che sfreccia; Shadow: nero con la fascia rossa degli aculei
+      const g = ctx.createLinearGradient(0, -80, 0, 10);
+      if (ballColor === 'sonic') {
+        g.addColorStop(0, '#9cc7ff');
+        g.addColorStop(0.5, '#1f5fd6');
+        g.addColorStop(1, '#0b2d7a');
+      } else {
+        g.addColorStop(0, '#4a4a4a');
+        g.addColorStop(0.42, '#111111');
+        g.addColorStop(0.42, '#e63946');
+        g.addColorStop(0.62, '#e63946');
+        g.addColorStop(0.62, '#111111');
+        g.addColorStop(1, '#000000');
+      }
       ctx.fillStyle = g;
     } else if (['summer', 'winter', 'autumn', 'spring'].includes(ballColor)) {
       // sfumatura della stagione, dall'alto in basso

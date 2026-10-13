@@ -313,6 +313,7 @@
   .controls {
     display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
   }
+  .controls button.off { background: #3a3f5c; }
   .controls button {
     background: var(--accent); color: #fff; border: none; border-radius: 8px;
     padding: 10px 18px; font-size: 1rem; cursor: pointer;
@@ -378,6 +379,7 @@
   <div class="controls">
     <button id="startBtn" data-i18n="pp.start">▶ Inizia / Pausa</button>
     <button id="resetBtn" data-i18n="pp.reset">↺ Ricomincia</button>
+    <button id="musicBtn">🔊 Musica: ON</button>
   </div>
 
   <p class="help" data-i18n-html="pp.help">
@@ -1931,17 +1933,38 @@
     requestAnimationFrame(loop);
   }
 
-  // la musica parte quando si preme Play e si ferma in pausa o a fine partita
+  // la musica suona sempre (anche in pausa, prima di iniziare e a fine partita);
+  // si spegne solo con il pulsante 🔊 Musica, e la scelta viene ricordata dal browser
   const music = document.getElementById('music');
   music.volume = 0.6;
+  const musicBtn = document.getElementById('musicBtn');
+  let musicOn = true;
+  try { musicOn = localStorage.getItem('pingpong-musica') !== 'off'; } catch (e) { /* niente */ }
 
   function syncMusic() {
-    if (running) {
-      music.play().catch(() => {});
-    } else {
-      music.pause();
-    }
+    if (musicOn) music.play().catch(() => {});
+    else music.pause();
+    musicBtn.textContent = I18N.t(musicOn ? 'pp.musicOn' : 'pp.musicOff');
+    musicBtn.classList.toggle('off', !musicOn);
   }
+
+  // i browser fanno partire l'audio solo dopo un gesto dell'utente:
+  // la musica parte al primo clic, tocco o tasto premuto in qualsiasi punto della pagina
+  function firstInteraction() {
+    syncMusic();
+    ['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.removeEventListener(ev, firstInteraction, true));
+  }
+  ['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.addEventListener(ev, firstInteraction, true));
+
+  musicBtn.addEventListener('click', e => {
+    musicOn = !musicOn;
+    try { localStorage.setItem('pingpong-musica', musicOn ? 'on' : 'off'); } catch (err) { /* niente */ }
+    syncMusic();
+    e.currentTarget.blur();
+  });
+  window.addEventListener('langchange', () => {
+    musicBtn.textContent = I18N.t(musicOn ? 'pp.musicOn' : 'pp.musicOff');
+  });
 
   function togglePause() {
     if (winner) return;
@@ -1977,12 +2000,13 @@
   document.getElementById('resetBtn').addEventListener('click', e => {
     resetGame();
     running = true;
-    music.currentTime = 0; // nuova partita: la musica riparte dall'inizio
     syncMusic();
     e.target.blur();
   });
 
   resetGame();
+  // prova a far partire la musica subito (alcuni browser lo permettono) e mostra lo stato del pulsante
+  syncMusic();
   requestAnimationFrame(loop);
 })();
 </script>

@@ -36,11 +36,10 @@ I nomi dei colori della pallina restano in inglese in tutte le lingue.
 
 Nel file `pingpong.html` è **incorporata** la registrazione `Nueva grabación.m4a` (circa 3 minuti), quindi il gioco funziona anche senza il file audio accanto.
 
-- La musica **parte quando premi Play** (pulsante **▶ Inizia / Pausa** o `Spazio`).
-- Si **ferma in pausa** e riprende da dove era quando ricominci a giocare.
-- Si **ferma a fine partita** (vittoria o tempo scaduto).
-- Con **↺ Ricomincia** riparte dall'inizio.
+- La musica **parte al primo clic, tocco o tasto** sulla pagina (i browser non permettono di farla partire prima) e poi **suona sempre**: prima della partita, durante il gioco, in pausa e a fine partita.
+- Con **↺ Ricomincia** la musica continua senza interrompersi.
 - Quando finisce ricomincia da capo (in loop).
+- Il pulsante **🔊 Musica: ON / 🔇 Musica: OFF** la spegne e la riaccende; il browser ricorda la scelta.
 
 Per cambiare canzone bisogna sostituire il contenuto dell'elemento `<audio id="music">` nel file HTML.
 

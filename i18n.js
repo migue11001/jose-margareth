@@ -55,6 +55,8 @@
       'pp.paused': 'In pausa',
       'pp.pressPlay': 'Premi Spazio o "Inizia" per giocare',
       'pp.pressReset': 'Premi "Ricomincia" per una nuova partita',
+      'pp.musicOn': '🔊 Musica: ON',
+      'pp.musicOff': '🔇 Musica: OFF',
 
       'pc.holding': 'In mano:',
       'pc.fly': 'Volo:',
@@ -115,6 +117,8 @@
       'pp.paused': 'Paused',
       'pp.pressPlay': 'Press Space or "Start" to play',
       'pp.pressReset': 'Press "Restart" for a new match',
+      'pp.musicOn': '🔊 Music: ON',
+      'pp.musicOff': '🔇 Music: OFF',
 
       'pc.holding': 'Holding:',
       'pc.fly': 'Flying:',
@@ -175,6 +179,8 @@
       'pp.paused': 'En pausa',
       'pp.pressPlay': 'Pulsa Espacio o "Empezar" para jugar',
       'pp.pressReset': 'Pulsa "Reiniciar" para una nueva partida',
+      'pp.musicOn': '🔊 Música: ON',
+      'pp.musicOff': '🔇 Música: OFF',
 
       'pc.holding': 'En la mano:',
       'pc.fly': 'Vuelo:',
@@ -235,6 +241,8 @@
       'pp.paused': '一時停止中',
       'pp.pressPlay': 'スペースか「スタート」を押してプレイ',
       'pp.pressReset': '「やり直す」を押して新しい試合',
+      'pp.musicOn': '🔊 音楽：ON',
+      'pp.musicOff': '🔇 音楽：OFF',
 
       'pc.holding': '手に持っている：',
       'pc.fly': '飛行：',
@@ -295,6 +303,8 @@
       'pp.paused': 'Pausiert',
       'pp.pressPlay': 'Drücke die Leertaste oder „Start“, um zu spielen',
       'pp.pressReset': 'Drücke „Neustart“ für ein neues Spiel',
+      'pp.musicOn': '🔊 Musik: AN',
+      'pp.musicOff': '🔇 Musik: AUS',
 
       'pc.holding': 'In der Hand:',
       'pc.fly': 'Fliegen:',

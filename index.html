@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sala Giochi</title>
+<title data-i18n="index.title">Sala Giochi</title>
+<script src="i18n.js"></script>
 <style>
   :root {
     --bg: #0f1220;
@@ -131,25 +132,25 @@
 <body>
 <main>
   <header>
-    <h1>🎮 Sala Giochi</h1>
-    <p>Scegli un gioco per iniziare</p>
+    <h1 data-i18n="index.h1">🎮 Sala Giochi</h1>
+    <p data-i18n="index.subtitle">Scegli un gioco per iniziare</p>
   </header>
 
   <section class="grid" id="games"></section>
 
-  <footer>Nuovi giochi in arrivo!</footer>
+  <footer data-i18n="index.footer">Nuovi giochi in arrivo!</footer>
 </main>
 
 <script>
   // Elenco dei giochi: per aggiungerne uno nuovo basta aggiungere un oggetto qui.
-  // Se "file" è vuoto la scheda compare come "In arrivo".
+  // I testi sono chiavi di traduzione (vedi i18n.js). Se "file" è vuoto la scheda compare come "In arrivo".
   const GAMES = [
     {
       title: 'Ping Pong',
       emoji: '🏓',
       file: 'pingpong.html',
-      description: 'Sfida un amico sulla stessa tastiera. Arriva a 10 punti, scegli tra 22 colori della pallina e attento ai tiri super veloci!',
-      tags: ['2 giocatori', 'Tastiera / Touch', '40 min'],
+      description: 'game.pingpong.desc',
+      tags: ['tag.2players', 'tag.keyboardTouch', 'tag.40min'],
       color: '#4f7cff',
       cover: 'linear-gradient(135deg, #1a2a6c, #4f7cff 55%, #a24bff)',
     },
@@ -157,72 +158,81 @@
       title: 'PixelCraft',
       emoji: '⛏️',
       file: 'pixelcraft.html',
-      description: 'Un mondo a pixel tutto da costruire: piazza e rompi blocchi, crea case e pianta alberi con un clic, vola sopra le colline.',
-      tags: ['1 giocatore', 'Costruzione', 'Mouse / Touch'],
+      description: 'game.pixelcraft.desc',
+      tags: ['tag.1player', 'tag.building', 'tag.mouseTouch'],
       color: '#5fa83a',
       cover: 'linear-gradient(180deg, #7ec8ff 0 48%, #5fa83a 48% 58%, #866043 58% 82%, #7d7d7d 82%)',
     },
-    { title: 'Gioco 3', emoji: '?', file: '', description: 'Un nuovo gioco arriverà presto in questa scheda.', tags: [] },
-    { title: 'Gioco 4', emoji: '?', file: '', description: 'Un nuovo gioco arriverà presto in questa scheda.', tags: [] },
+    { number: 3, emoji: '?', file: '', tags: [] },
+    { number: 4, emoji: '?', file: '', tags: [] },
   ];
 
   const grid = document.getElementById('games');
+  const t = (key, vars) => I18N.t(key, vars);
 
-  GAMES.forEach(game => {
-    const available = Boolean(game.file);
-    const card = document.createElement(available ? 'a' : 'div');
-    card.className = 'card' + (available ? '' : ' soon');
-    if (available) {
-      card.href = game.file;
-      card.style.setProperty('--card-color', game.color);
-      card.style.setProperty('--cover', game.cover);
-    }
+  function renderGames() {
+    grid.innerHTML = '';
+    GAMES.forEach(game => {
+      const available = Boolean(game.file);
+      const card = document.createElement(available ? 'a' : 'div');
+      card.className = 'card' + (available ? '' : ' soon');
+      if (available) {
+        card.href = game.file;
+        card.style.setProperty('--card-color', game.color);
+        card.style.setProperty('--cover', game.cover);
+      }
 
-    const cover = document.createElement('div');
-    cover.className = 'cover';
-    cover.textContent = game.emoji;
-    card.appendChild(cover);
+      const cover = document.createElement('div');
+      cover.className = 'cover';
+      cover.textContent = game.emoji;
+      card.appendChild(cover);
 
-    if (!available) {
-      const badge = document.createElement('span');
-      badge.className = 'badge';
-      badge.textContent = 'In arrivo';
-      card.appendChild(badge);
-    }
+      if (!available) {
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = t('card.soon');
+        card.appendChild(badge);
+      }
 
-    const body = document.createElement('div');
-    body.className = 'body';
+      const body = document.createElement('div');
+      body.className = 'body';
 
-    const h2 = document.createElement('h2');
-    h2.textContent = game.title;
-    body.appendChild(h2);
+      const h2 = document.createElement('h2');
+      h2.textContent = available ? game.title : t('card.soonTitle', { n: game.number });
+      body.appendChild(h2);
 
-    if (game.tags.length) {
-      const tags = document.createElement('div');
-      tags.className = 'tags';
-      game.tags.forEach(t => {
-        const tag = document.createElement('span');
-        tag.className = 'tag';
-        tag.textContent = t;
-        tags.appendChild(tag);
-      });
-      body.appendChild(tags);
-    }
+      if (game.tags.length) {
+        const tags = document.createElement('div');
+        tags.className = 'tags';
+        game.tags.forEach(key => {
+          const tag = document.createElement('span');
+          tag.className = 'tag';
+          tag.textContent = t(key);
+          tags.appendChild(tag);
+        });
+        body.appendChild(tags);
+      }
 
-    const p = document.createElement('p');
-    p.textContent = game.description;
-    body.appendChild(p);
+      const p = document.createElement('p');
+      p.textContent = available ? t(game.description) : t('card.soonDesc');
+      body.appendChild(p);
 
-    if (available) {
-      const play = document.createElement('span');
-      play.className = 'play';
-      play.innerHTML = '<span>▶ Gioca</span>';
-      body.appendChild(play);
-    }
+      if (available) {
+        const play = document.createElement('span');
+        play.className = 'play';
+        const label = document.createElement('span');
+        label.textContent = t('card.play');
+        play.appendChild(label);
+        body.appendChild(play);
+      }
 
-    card.appendChild(body);
-    grid.appendChild(card);
-  });
+      card.appendChild(body);
+      grid.appendChild(card);
+    });
+  }
+
+  renderGames();
+  window.addEventListener('langchange', renderGames);
 </script>
 </body>
 </html>

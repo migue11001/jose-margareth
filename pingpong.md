@@ -26,6 +26,12 @@ Dal gioco puoi tornare alla Sala Giochi con il pulsante **← Tutti i giochi** i
 
 **Touch screen:** trascina il dito sulla metà sinistra del campo per muovere il Giocatore 1, sulla metà destra per il Giocatore 2.
 
+## Lingue
+
+In fondo a ogni pagina (Sala Giochi, Ping Pong e PixelCraft) c'è la scelta della lingua: 🇮🇹 Italiano · 🇬🇧 English · 🇪🇸 Español · 🇯🇵 日本語 · 🇩🇪 Deutsch.
+La scelta vale per tutto il sito e viene ricordata dal browser. Le traduzioni sono tutte nel file `i18n.js`.
+I nomi dei colori della pallina restano in inglese in tutte le lingue.
+
 ## Musica
 
 Nel file `pingpong.html` è **incorporata** la registrazione `Nueva grabación.m4a` (circa 3 minuti), quindi il gioco funziona anche senza il file audio accanto.

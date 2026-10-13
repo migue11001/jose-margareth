@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PixelCraft</title>
+<script src="i18n.js"></script>
 <style>
   :root {
     --bg: #0f1220;
@@ -178,7 +179,7 @@
 </head>
 <body>
   <div class="top">
-    <a class="back" href="index.html">← Tutti i giochi</a>
+    <a class="back" href="index.html" data-i18n="common.back">← Tutti i giochi</a>
     <h1>PIXELCRAFT</h1>
     <div class="spacer"></div>
   </div>
@@ -186,9 +187,9 @@
   <canvas id="game" width="960" height="540"></canvas>
 
   <div class="status">
-    <span>In mano: <b id="toolName">Erba</b></span>
-    <span>Volo: <b id="flyState">OFF</b></span>
-    <span>Piazza sullo sfondo: <b id="bgState">OFF</b></span>
+    <span><span data-i18n="pc.holding">In mano:</span> <b id="toolName">Erba</b></span>
+    <span><span data-i18n="pc.fly">Volo:</span> <b id="flyState">OFF</b></span>
+    <span><span data-i18n="pc.bgPlace">Piazza sullo sfondo:</span> <b id="bgState">OFF</b></span>
   </div>
 
   <div class="hotbar" id="hotbar"></div>
@@ -201,13 +202,13 @@
   </div>
 
   <div class="buttons">
-    <button id="flyBtn">✈️ Volo</button>
-    <button id="bgBtn">🧱 Sfondo</button>
-    <button id="saveBtn">💾 Salva</button>
-    <button id="newBtn">🌍 Nuovo mondo</button>
+    <button id="flyBtn" data-i18n="pc.btnFly">✈️ Volo</button>
+    <button id="bgBtn" data-i18n="pc.btnBg">🧱 Sfondo</button>
+    <button id="saveBtn" data-i18n="pc.btnSave">💾 Salva</button>
+    <button id="newBtn" data-i18n="pc.btnNew">🌍 Nuovo mondo</button>
   </div>
 
-  <p class="help">
+  <p class="help" data-i18n-html="pc.help">
     Muoviti: <kbd>A</kbd> <kbd>D</kbd> o <kbd>←</kbd> <kbd>→</kbd> &nbsp;·&nbsp;
     Salta: <kbd>W</kbd> <kbd>↑</kbd> o <kbd>Spazio</kbd> &nbsp;·&nbsp;
     Volo: <kbd>F</kbd> (in volo <kbd>W</kbd>/<kbd>S</kbd> per salire e scendere)<br>
@@ -235,11 +236,12 @@
     AIR: 0, GRASS: 1, DIRT: 2, STONE: 3, COBBLE: 4, LOG: 5, LEAVES: 6, PLANKS: 7, GLASS: 8,
     BRICKS: 9, SAND: 10, WATER: 11, BEDROCK: 12, DOOR: 13, ROOF: 14, FLOWER: 15,
   };
-  const NAMES = {
-    [B.GRASS]: 'Erba', [B.DIRT]: 'Terra', [B.STONE]: 'Pietra', [B.COBBLE]: 'Ciottoli',
-    [B.LOG]: 'Tronco', [B.LEAVES]: 'Foglie', [B.PLANKS]: 'Assi di legno', [B.GLASS]: 'Vetro',
-    [B.BRICKS]: 'Mattoni', [B.SAND]: 'Sabbia', [B.WATER]: 'Acqua', [B.BEDROCK]: 'Roccia madre',
-    [B.DOOR]: 'Porta', [B.ROOF]: 'Tegole', [B.FLOWER]: 'Fiore',
+  // chiavi di traduzione dei nomi dei blocchi (vedi i18n.js)
+  const NAME_KEYS = {
+    [B.GRASS]: 'block.grass', [B.DIRT]: 'block.dirt', [B.STONE]: 'block.stone', [B.COBBLE]: 'block.cobble',
+    [B.LOG]: 'block.log', [B.LEAVES]: 'block.leaves', [B.PLANKS]: 'block.planks', [B.GLASS]: 'block.glass',
+    [B.BRICKS]: 'block.bricks', [B.SAND]: 'block.sand', [B.WATER]: 'block.water', [B.BEDROCK]: 'block.bedrock',
+    [B.DOOR]: 'block.door', [B.ROOF]: 'block.roof', [B.FLOWER]: 'block.flower',
   };
   // blocchi che si possono attraversare
   const PASSABLE = new Set([B.AIR, B.WATER, B.DOOR, B.FLOWER]);
@@ -561,10 +563,11 @@
   const TOOLS = [
     B.GRASS, B.DIRT, B.STONE, B.COBBLE, B.LOG, B.LEAVES, B.PLANKS, B.GLASS, B.BRICKS, B.ROOF,
     B.DOOR, B.SAND, B.FLOWER, B.WATER,
-  ].map(id => ({ type: 'block', id, name: NAMES[id] }));
-  TOOLS.push({ type: 'stamp', id: 'tree', name: 'Albero', emoji: '🌳', key: 'T' });
-  TOOLS.push({ type: 'stamp', id: 'house', name: 'Casa', emoji: '🏠', key: 'C' });
-  TOOLS.push({ type: 'break', name: 'Piccone (rompi)', emoji: '⛏️', key: 'X' });
+  ].map(id => ({ type: 'block', id, nameKey: NAME_KEYS[id] }));
+  TOOLS.push({ type: 'stamp', id: 'tree', nameKey: 'tool.tree', emoji: '🌳', key: 'T' });
+  TOOLS.push({ type: 'stamp', id: 'house', nameKey: 'tool.house', emoji: '🏠', key: 'C' });
+  TOOLS.push({ type: 'break', nameKey: 'tool.pick', emoji: '⛏️', key: 'X' });
+  const toolName = tool => I18N.t(tool.nameKey);
   const TREE_TOOL = TOOLS.length - 3, HOUSE_TOOL = TOOLS.length - 2, BREAK_TOOL = TOOLS.length - 1;
 
   let selected = 0;
@@ -572,11 +575,11 @@
   const slots = TOOLS.map((tool, i) => {
     const b = document.createElement('button');
     b.className = 'slot';
-    b.title = tool.name;
+    b.title = toolName(tool);
     if (tool.type === 'block') {
       const img = document.createElement('img');
       img.src = TEX[tool.id].toDataURL();
-      img.alt = tool.name;
+      img.alt = toolName(tool);
       b.appendChild(img);
     } else {
       const e = document.createElement('span');
@@ -596,9 +599,19 @@
   function select(i) {
     selected = (i + TOOLS.length) % TOOLS.length;
     slots.forEach((s, j) => s.classList.toggle('active', j === selected));
-    document.getElementById('toolName').textContent = TOOLS[selected].name;
+    document.getElementById('toolName').textContent = toolName(TOOLS[selected]);
   }
   select(0);
+
+  // quando cambia la lingua si aggiornano i nomi dei blocchi
+  window.addEventListener('langchange', () => {
+    slots.forEach((b, i) => {
+      b.title = toolName(TOOLS[i]);
+      const img = b.querySelector('img');
+      if (img) img.alt = b.title;
+    });
+    select(selected);
+  });
 
   // ---------- Mouse / tocco ----------
   let camX = 0, camY = 0;
@@ -744,9 +757,9 @@
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         fg: toB64(fg), bg: toB64(bg), x: player.x, y: player.y, heights,
       }));
-      if (!quiet) showToast('💾 Mondo salvato');
+      if (!quiet) showToast(I18N.t('pc.saved'));
     } catch (e) {
-      if (!quiet) showToast('Non è stato possibile salvare il mondo');
+      if (!quiet) showToast(I18N.t('pc.saveError'));
     }
   }
 
@@ -771,10 +784,10 @@
   document.getElementById('saveBtn').addEventListener('click', e => { saveWorld(false); e.currentTarget.blur(); });
   document.getElementById('newBtn').addEventListener('click', e => {
     e.currentTarget.blur();
-    if (confirm('Vuoi creare un nuovo mondo? Quello attuale verrà cancellato.')) {
+    if (confirm(I18N.t('pc.newConfirm'))) {
       generate();
       saveWorld(true);
-      showToast('🌍 Nuovo mondo creato');
+      showToast(I18N.t('pc.newCreated'));
     }
   });
   setInterval(() => saveWorld(true), 15000);

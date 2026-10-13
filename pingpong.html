@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ping Pong 2 Giocatori</title>
+<title data-i18n="pp.doctitle">Ping Pong 2 Giocatori</title>
+<script src="i18n.js"></script>
 <style>
   :root {
     --bg: #0f1220;
@@ -324,17 +325,17 @@
 </style>
 </head>
 <body>
-  <a class="back" href="index.html">← Tutti i giochi</a>
+  <a class="back" href="index.html" data-i18n="common.back">← Tutti i giochi</a>
   <h1>🏓 Ping Pong</h1>
 
   <div class="players">
     <label class="player-box">
-      <span>Seleziona nome del giocatore 1</span>
-      <input id="name1" type="text" maxlength="14" placeholder="Giocatore 1" autocomplete="off">
+      <span data-i18n="pp.selectName" data-i18n-n="1">Seleziona nome del giocatore 1</span>
+      <input id="name1" type="text" maxlength="14" placeholder="Giocatore 1" data-i18n-placeholder="pp.player" data-i18n-n="1" autocomplete="off">
     </label>
     <label class="player-box">
-      <span>Seleziona nome del giocatore 2</span>
-      <input id="name2" type="text" maxlength="14" placeholder="Giocatore 2" autocomplete="off">
+      <span data-i18n="pp.selectName" data-i18n-n="2">Seleziona nome del giocatore 2</span>
+      <input id="name2" type="text" maxlength="14" placeholder="Giocatore 2" data-i18n-placeholder="pp.player" data-i18n-n="2" autocomplete="off">
     </label>
   </div>
 
@@ -342,44 +343,44 @@
 
   <div class="palette">
   <div class="colors" id="original-colors">
-    <span>🎨 Colori originali</span>
+    <span data-i18n="sec.original">🎨 Colori originali</span>
   </div>
 
   <div class="colors special" id="colors">
-    <span>🎨 Colori originali 2</span>
+    <span data-i18n="sec.original2">🎨 Colori originali 2</span>
   </div>
 
   <div class="colors special" id="special-colors">
-    <span>✨ Colori speciali</span>
+    <span data-i18n="sec.special">✨ Colori speciali</span>
   </div>
 
   <div class="colors special" id="elemental-colors">
-    <span>🌍 Colori elementali</span>
+    <span data-i18n="sec.elemental">🌍 Colori elementali</span>
   </div>
 
   <div class="colors special" id="hero-colors">
-    <span>🦸 Hero Color</span>
+    <span data-i18n="sec.hero">🦸 Hero Color</span>
   </div>
 
   <div class="colors special" id="mineral-colors">
-    <span>💎 Colori minerali</span>
+    <span data-i18n="sec.mineral">💎 Colori minerali</span>
   </div>
 
   <div class="colors special" id="flag-colors">
-    <span>🚩 Flags Color</span>
+    <span data-i18n="sec.flags">🚩 Flags Color</span>
   </div>
 
   <div class="colors special" id="ultra-colors">
-    <span>💥 Ultra Color</span>
+    <span data-i18n="sec.ultra">💥 Ultra Color</span>
   </div>
   </div>
 
   <div class="controls">
-    <button id="startBtn">▶ Inizia / Pausa</button>
-    <button id="resetBtn">↺ Ricomincia</button>
+    <button id="startBtn" data-i18n="pp.start">▶ Inizia / Pausa</button>
+    <button id="resetBtn" data-i18n="pp.reset">↺ Ricomincia</button>
   </div>
 
-  <p class="help">
+  <p class="help" data-i18n-html="pp.help">
     Giocatore 1: <kbd>W</kbd> su, <kbd>S</kbd> giù &nbsp;·&nbsp;
     Giocatore 2: <kbd>↑</kbd> su, <kbd>↓</kbd> giù &nbsp;·&nbsp;
     <kbd>Spazio</kbd> pausa &nbsp;·&nbsp; Vince chi arriva a 10 punti o chi ha più punti allo scadere dei 40 minuti.<br>
@@ -673,7 +674,7 @@
   });
 
   function playerName(n) {
-    return nameInputs[n - 1].value.trim() || 'Giocatore ' + n;
+    return nameInputs[n - 1].value.trim() || I18N.t('pp.player', { n });
   }
 
   function timeUp() {
@@ -1657,22 +1658,22 @@
       ctx.globalAlpha = Math.min(1, msgLeft / 300);
       ctx.lineWidth = 6;
       ctx.strokeStyle = '#000';
-      ctx.strokeText('⚡ SUPER VELOCE! ⚡', W / 2, H - 40);
+      ctx.strokeText(I18N.t('pp.superFast'), W / 2, H - 40);
       ctx.fillStyle = '#ffe14b';
       ctx.shadowColor = '#ffe14b';
       ctx.shadowBlur = 20;
-      ctx.fillText('⚡ SUPER VELOCE! ⚡', W / 2, H - 40);
+      ctx.fillText(I18N.t('pp.superFast'), W / 2, H - 40);
       ctx.restore();
     }
 
     // messaggi
     ctx.textAlign = 'center';
     if (winner === 'pareggio') {
-      overlay('⏱ Tempo scaduto: pareggio!', 'Premi "Ricomincia" per una nuova partita');
+      overlay(I18N.t('pp.draw'), I18N.t('pp.pressReset'));
     } else if (winner) {
       drawWin();
     } else if (!running) {
-      overlay('In pausa', 'Premi Spazio o "Inizia" per giocare');
+      overlay(I18N.t('pp.paused'), I18N.t('pp.pressPlay'));
     }
   }
 
@@ -1906,7 +1907,7 @@
     ctx.font = '18px system-ui, sans-serif';
     ctx.fillStyle = '#b9c0e6';
     textGlow('#b9c0e6');
-    ctx.fillText('Premi "Ricomincia" per una nuova partita', W / 2, H / 2 + 85);
+    ctx.fillText(I18N.t('pp.pressReset'), W / 2, H / 2 + 85);
     textGlowOff();
   }
 

@@ -1923,8 +1923,37 @@
   }
 
   // Coriandoli
-  const CONFETTI_COLORS = ['#ff3b3b', '#3b7bff', '#2ee66b', '#ff6fc8', '#a24bff', '#ffe14b', '#ff8c1a', '#ffffff'];
+  // i coriandoli prendono i colori della pallina scelta (gli stessi del tema dello sfondo),
+  // con qualche sfumatura più chiara e più scura
   const confetti = [];
+  const confettiPalettes = {};
+
+  function shade(hex, amount) {
+    // amount > 0 schiarisce verso il bianco, < 0 scurisce verso il nero
+    const n = parseInt(hex.slice(1), 16);
+    const mix = (c) => Math.round(amount > 0 ? c + (255 - c) * amount : c * (1 + amount));
+    const r = mix(n >> 16), g = mix((n >> 8) & 255), b = mix(n & 255);
+    return '#' + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
+  }
+
+  function confettiPalette(color) {
+    if (confettiPalettes[color]) return confettiPalettes[color];
+    const base = [...new Set(bgColors(color, 0))];
+    const palette = [];
+    base.forEach(c => {
+      palette.push(c);
+      if (/^#[0-9a-f]{6}$/i.test(c)) palette.push(shade(c, 0.45), shade(c, -0.25));
+    });
+    confettiPalettes[color] = palette;
+    return palette;
+  }
+
+  function confettoColor(c) {
+    // con Arcobaleno ogni coriandolo cambia colore di continuo
+    if (ballColor === 'rainbow') return `hsl(${(c.pick * 360 + hue) % 360}, 100%, 60%)`;
+    const palette = confettiPalette(ballColor);
+    return palette[Math.floor(c.pick * palette.length)];
+  }
 
   function makeConfetto(startAbove) {
     return {
@@ -1937,7 +1966,7 @@
       rot: Math.random() * Math.PI * 2,
       vrot: Math.random() * 0.2 - 0.1,
       sway: Math.random() * Math.PI * 2,
-      color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+      pick: Math.random(),
     };
   }
 
@@ -1956,7 +1985,7 @@
       ctx.translate(c.x, c.y);
       ctx.rotate(c.rot);
       // l'altezza oscilla per simulare il coriandolo che gira su se stesso
-      ctx.fillStyle = c.color;
+      ctx.fillStyle = confettoColor(c);
       ctx.fillRect(-c.w / 2, -c.h / 2 * Math.abs(Math.cos(c.sway)), c.w, c.h * Math.abs(Math.cos(c.sway)));
       ctx.restore();
     });

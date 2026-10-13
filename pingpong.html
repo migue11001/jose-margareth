@@ -47,14 +47,33 @@
     height: auto;
     touch-action: none;
   }
+  /* le sezioni dei colori stanno una accanto all'altra, come colonne */
+  .palette {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+    gap: 10px;
+    width: 100%;
+    max-width: 960px;
+    align-items: start;
+  }
   .colors {
-    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 7px;
+    background: var(--panel);
+    border: 1px solid #2a3155;
+    border-radius: 12px;
+    padding: 10px 8px 12px;
   }
-  .colors > span { width: 100%; text-align: center; color: var(--muted); font-size: .9rem; }
-  .colors.special {
-    border-top: 1px solid #2a3155;
-    padding-top: 12px;
+  .colors > span {
+    text-align: center; color: var(--muted); font-size: .82rem;
+    min-height: 2.4em; display: flex; align-items: center; justify-content: center;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #2a3155;
+    margin-bottom: 2px;
   }
+  .colors .color-btn { width: 100%; padding: 7px 8px; }
   .colors > span { color: var(--text); font-weight: 600; }
 
   /* tutte le scritte lampeggiano piano, con una dissolvenza morbida */
@@ -267,6 +286,7 @@
 
   <canvas id="game" width="800" height="480"></canvas>
 
+  <div class="palette">
   <div class="colors" id="original-colors">
     <span>🎨 Colori originali</span>
   </div>
@@ -293,6 +313,7 @@
 
   <div class="colors special" id="ultra-colors">
     <span>💥 Ultra Color</span>
+  </div>
   </div>
 
   <div class="controls">

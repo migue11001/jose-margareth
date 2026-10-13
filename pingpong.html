@@ -164,6 +164,20 @@
     color: #fff;
     text-shadow: 0 0 3px #000, 0 0 3px #000;
   }
+  .diamond-bg {
+    background:
+      linear-gradient(135deg, transparent 0 46%, rgba(255,255,255,.85) 48% 52%, transparent 54%),
+      conic-gradient(from 20deg, #b9fbff, #4ff0ff, #e9feff, #2bc4e0, #b9fbff, #6ff6ff, #e9feff, #4ff0ff, #b9fbff);
+    color: #06485a;
+    text-shadow: 0 0 3px #fff, 0 0 3px #fff;
+  }
+  .emerald-bg {
+    background:
+      linear-gradient(135deg, transparent 0 46%, rgba(220,255,235,.7) 48% 52%, transparent 54%),
+      conic-gradient(from 20deg, #0b6e3c, #11c26d, #50e3a4, #0f9d58, #0b6e3c, #2fd585, #50e3a4, #11c26d, #0b6e3c);
+    color: #fff;
+    text-shadow: 0 0 3px #00331a, 0 0 3px #00331a;
+  }
   .ultra-bg {
     background: conic-gradient(#ff3b3b, #ff8c1a, #ffe14b, #2ee66b, #1de9c9, #3b7bff, #a24bff, #ff6fc8, #ff3b3b);
     color: #fff;
@@ -273,6 +287,10 @@
     <span>🦸 Hero Color</span>
   </div>
 
+  <div class="colors special" id="mineral-colors">
+    <span>💎 Colori minerali</span>
+  </div>
+
   <div class="colors special" id="ultra-colors">
     <span>💥 Ultra Color</span>
   </div>
@@ -333,6 +351,8 @@
     { id: 'neve',       label: 'Snow',        value: 'snow' },
     { id: 'spiderman',  label: 'Spider-Man',  value: 'spiderman' },
     { id: 'ironman',    label: 'Iron Man',    value: 'ironman' },
+    { id: 'diamante',   label: 'Diamond',     value: 'diamond' },
+    { id: 'smeraldo',   label: 'Emerald',     value: 'emerald' },
     { id: 'ultra',      label: 'Ultra',       value: 'ultra' },
   ];
 
@@ -356,6 +376,7 @@
     maledetto: '#ff0000', cyborg: '#00e5ff', lava: '#ff6a00', acqua: '#2ba8ff',
     terra: '#7bc44a', neve: '#bfe8ff', spiderman: '#ff1a2e', ironman: '#ffc94a',
     ultra: '#ffffff',
+    diamante: '#4ff0ff', smeraldo: '#11c26d',
   };
 
   // Color buttons divisi in sezioni: originali, altri, speciali
@@ -365,6 +386,8 @@
   const elementalEl = document.getElementById('elemental-colors');
   const HERO = ['spiderman', 'ironman'];
   const heroEl = document.getElementById('hero-colors');
+  const MINERAL = ['diamante', 'smeraldo'];
+  const mineralEl = document.getElementById('mineral-colors');
   const ULTRA = ['ultra'];
   const ultraEl = document.getElementById('ultra-colors');
   const originalEl = document.getElementById('original-colors');
@@ -387,6 +410,8 @@
     else if (c.value === 'spiderman') b.classList.add('spider-bg');
     else if (c.value === 'ironman') b.classList.add('ironman-bg');
     else if (c.value === 'ultra') b.classList.add('ultra-bg');
+    else if (c.value === 'diamond') b.classList.add('diamond-bg');
+    else if (c.value === 'emerald') b.classList.add('emerald-bg');
     else if (c.value === 'lava') b.classList.add('lava-bg');
     else if (c.value === 'water') b.classList.add('water-bg');
     else if (c.value === 'earth') b.classList.add('earth-bg');
@@ -404,6 +429,7 @@
                   : SPECIAL.includes(c.id) ? specialEl
                   : ELEMENTAL.includes(c.id) ? elementalEl
                   : HERO.includes(c.id) ? heroEl
+                  : MINERAL.includes(c.id) ? mineralEl
                   : ULTRA.includes(c.id) ? ultraEl
                   : colorsEl;
     section.appendChild(b);
@@ -534,6 +560,8 @@
     if (ballColor === 'galaxy') return `hsl(${270 + Math.sin(h / 30) * 50}, 90%, 62%)`;
     if (ballColor === 'cursed') return cursedOn() ? '#ff1a1a' : '#5a0000';
     if (ballColor === 'cyborg') return cyborgOn() ? '#5ff3ff' : '#1e5bff';
+    if (ballColor === 'diamond') return Math.floor(h / 20) % 3 ? '#4ff0ff' : '#e9feff';
+    if (ballColor === 'emerald') return Math.floor(h / 20) % 3 ? '#11c26d' : '#7dffc0';
     if (ballColor === 'ironman') return Math.floor(h / 24) % 2 ? '#f2c14e' : '#c8102e';
     if (ballColor === 'spiderman') return Math.floor(h / 24) % 2 ? '#1846c9' : '#e0001f';
     if (ballColor === 'candy') return Math.floor(h / 20) % 2 ? '#ff3d7f' : '#ffffff';
@@ -821,6 +849,60 @@
     ctx.restore();
   }
 
+  // pallina gemma (diamante / smeraldo): sfaccettature, tavola centrale e un luccichio che brilla
+  const GEMS = {
+    diamond: { light: '#e9feff', mid: '#4ff0ff', dark: '#1a8fb0', facet: 'rgba(255,255,255,0.85)', glow: '#9ff8ff' },
+    emerald: { light: '#9dffd0', mid: '#11c26d', dark: '#064d29', facet: 'rgba(200,255,225,0.7)', glow: '#50e3a4' },
+  };
+
+  function drawGem(x, y, r, t, gem) {
+    const c = GEMS[gem];
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.shadowColor = c.glow;
+    ctx.shadowBlur = 16;
+    const g = ctx.createRadialGradient(-r / 3, -r / 3, 0, 0, 0, r);
+    g.addColorStop(0, c.light);
+    g.addColorStop(0.55, c.mid);
+    g.addColorStop(1, c.dark);
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // sfaccettature: un ottagono al centro collegato al bordo
+    ctx.rotate(t / 2500);
+    ctx.strokeStyle = c.facet;
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * Math.PI * 2;
+      const ix = Math.cos(a) * r * 0.48, iy = Math.sin(a) * r * 0.48;
+      if (i === 0) ctx.moveTo(ix, iy); else ctx.lineTo(ix, iy);
+    }
+    ctx.closePath();
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * Math.PI * 2;
+      ctx.moveTo(Math.cos(a) * r * 0.48, Math.sin(a) * r * 0.48);
+      ctx.lineTo(Math.cos(a + Math.PI / 8) * r, Math.sin(a + Math.PI / 8) * r);
+    }
+    ctx.stroke();
+    ctx.rotate(-t / 2500);
+
+    // luccichio a stella che si accende e si spegne
+    const s = Math.max(0, Math.sin(t / 260));
+    if (s > 0.05) {
+      ctx.fillStyle = `rgba(255, 255, 255, ${s})`;
+      const sx = -r * 0.35, sy = -r * 0.4, l = r * 0.75 * s;
+      ctx.beginPath();
+      ctx.moveTo(sx, sy - l); ctx.lineTo(sx + l * 0.2, sy - l * 0.2); ctx.lineTo(sx + l, sy);
+      ctx.lineTo(sx + l * 0.2, sy + l * 0.2); ctx.lineTo(sx, sy + l); ctx.lineTo(sx - l * 0.2, sy + l * 0.2);
+      ctx.lineTo(sx - l, sy); ctx.lineTo(sx - l * 0.2, sy - l * 0.2);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
   // pallina iron man: elmo rosso metallico con la maschera dorata e gli occhi luminosi
   function drawIronMan(x, y, r, t) {
     ctx.save();
@@ -993,6 +1075,8 @@
     snow:      ['#bfe8ff', '#ffffff', '#8fcff5'],
     spiderman: ['#e0001f', '#1846c9', '#e0001f'],
     ironman:   ['#c8102e', '#f2c14e', '#c8102e'],
+    diamond:   ['#2bc4e0', '#b9fbff', '#4ff0ff'],
+    emerald:   ['#0b6e3c', '#11c26d', '#50e3a4'],
   };
   const BG_FADE = 700; // ms per passare dai colori vecchi ai nuovi
 
@@ -1106,6 +1190,8 @@
       drawSpider(ball.x, ball.y, BALL_R);
     } else if (ballColor === 'ironman') {
       drawIronMan(ball.x, ball.y, BALL_R, performance.now());
+    } else if (ballColor === 'diamond' || ballColor === 'emerald') {
+      drawGem(ball.x, ball.y, BALL_R, performance.now(), ballColor);
     } else if (ballColor === 'candy') {
       drawCandy(ball.x, ball.y, BALL_R, performance.now() / 200);
     } else if (ballColor === 'lava') {
@@ -1267,6 +1353,17 @@
       g.addColorStop(clamp(shine, 0, 1), '#ffd98a');
       g.addColorStop(clamp(shine + 0.08, 0, 1), '#c8102e');
       g.addColorStop(1, '#8a0a10');
+      ctx.fillStyle = g;
+    } else if (ballColor === 'diamond' || ballColor === 'emerald') {
+      // colori della gemma con un riflesso bianco che la attraversa
+      const c = GEMS[ballColor];
+      const shine = ((performance.now() / 1300) % 1) * 1.4 - 0.2;
+      const g = ctx.createLinearGradient(-220, -60, 220, 20);
+      g.addColorStop(0, c.dark);
+      g.addColorStop(clamp(shine - 0.1, 0, 1), c.mid);
+      g.addColorStop(clamp(shine, 0, 1), '#ffffff');
+      g.addColorStop(clamp(shine + 0.1, 0, 1), c.mid);
+      g.addColorStop(1, c.light);
       ctx.fillStyle = g;
     } else if (ballColor === 'candy') {
       // strisce diagonali rosa e bianche

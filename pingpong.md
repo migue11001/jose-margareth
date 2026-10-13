@@ -94,6 +94,13 @@ Purple · Sky Blue · Turquoise · Gold · Brown
 | **Spider-Man** | Maschera rossa con ragnatela nera, occhi bianchi e parte bassa blu | Rossa con la ragnatela nera e la parte bassa blu |
 | **Iron Man** | Elmo rosso metallico con maschera dorata e occhi azzurri luminosi che pulsano | Rosso metallico con un riflesso dorato che scorre |
 
+### 💎 Colori minerali
+
+| Colore | Pallina | Scritta YOU WIN |
+|--------|---------|-----------------|
+| **Diamond** | Gemma azzurra brillante con le sfaccettature che ruotano e un luccichio a stella | Dal blu all'azzurro chiaro, con un riflesso bianco che scorre |
+| **Emerald** | Gemma verde con le sfaccettature che ruotano e un luccichio a stella | Dal verde scuro al verde chiaro, con un riflesso bianco che scorre |
+
 ### 💥 Ultra Color
 
 | Colore | Pallina | Scritta YOU WIN |
@@ -122,4 +129,4 @@ Per aggiungere un nuovo colore semplice basta aggiungere una riga all'elenco `CO
 { id: 'menta', label: 'Mint', value: '#3dffb0' },
 ```
 
-Il pulsante comparirà nella sezione **Colori originali 2**, e il nuovo colore entrerà automaticamente anche nel giro di **Ultra**. Per metterlo in un'altra sezione, aggiungi il suo `id` all'elenco `ORIGINAL`, `SPECIAL`, `ELEMENTAL`, `HERO` o `ULTRA`.
+Il pulsante comparirà nella sezione **Colori originali 2**, e il nuovo colore entrerà automaticamente anche nel giro di **Ultra**. Per metterlo in un'altra sezione, aggiungi il suo `id` all'elenco `ORIGINAL`, `SPECIAL`, `ELEMENTAL`, `HERO`, `MINERAL` o `ULTRA`.

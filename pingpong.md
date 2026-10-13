@@ -65,7 +65,7 @@ Red · Blue · Green · Pink · Yellow · Orange · White
 
 ### 🎨 Colori originali 2
 
-Purple · Sky Blue · Turquoise · Gold · Brown
+Purple · Sky Blue · Turquoise · Brown
 
 ### ✨ Colori speciali
 
@@ -103,6 +103,10 @@ Purple · Sky Blue · Turquoise · Gold · Brown
 |--------|---------|-----------------|
 | **Diamond** | Gemma azzurra brillante con le sfaccettature che ruotano e un luccichio a stella | Dal blu all'azzurro chiaro, con un riflesso bianco che scorre |
 | **Emerald** | Gemma verde con le sfaccettature che ruotano e un luccichio a stella | Dal verde scuro al verde chiaro, con un riflesso bianco che scorre |
+| **Amethyst** | Gemma viola con le sfaccettature che ruotano e un luccichio a stella | Dal viola scuro al lilla, con un riflesso bianco che scorre |
+| **Netherite** | Sfera di metallo grigio scurissimo con venature rossicce e un riflesso che scorre | Grigio scuro metallico con un riflesso che scorre |
+| **Copper** | Sfera di rame arancione con macchie verde acqua di ossidazione e un riflesso | Dal rame scuro al rame chiaro, con un riflesso bianco |
+| **Gold** | Sfera d'oro lucida con un riflesso che scorre (prima era un colore semplice tra gli Originali 2) | Dall'oro scuro all'oro chiaro, con un riflesso bianco |
 
 ### 💥 Ultra Color
 

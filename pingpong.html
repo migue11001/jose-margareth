@@ -2081,31 +2081,56 @@
 
   // i comandi del gioco (testo di pp.help senza i tag HTML), una riga per ogni voce
   function helpLines() {
-    return I18N.t('pp.help')
+    const lines = I18N.t('pp.help')
       .replace(/<\/?(kbd|b)>/g, '')
       .replace(/&nbsp;/g, ' ')
       .split(/<br>|·/)
       .map(s => s.trim())
       .filter(Boolean);
+    // sul telefono la tastiera non c'è: restano solo la regola per vincere e i comandi touch
+    return matchMedia('(pointer: coarse)').matches ? lines.slice(-2) : lines;
+  }
+
+  // divide una frase in più righe perché non esca dal campo
+  function wrapText(text, maxWidth) {
+    const out = [];
+    let line = '';
+    for (const word of text.split(' ')) {
+      const test = line ? line + ' ' + word : word;
+      if (line && ctx.measureText(test).width > maxWidth) { out.push(line); line = word; }
+      else line = test;
+    }
+    if (line) out.push(line);
+    return out;
   }
 
   function overlay(title, subtitle, lines = []) {
-    const LINE = 24;
+    // quando il campo è rimpicciolito (telefono) le scritte crescono per restare leggibili
+    let s = Math.min(1.9, Math.max(1, W / (canvas.clientWidth || W)));
+    let rows;
+    // se tutto insieme non ci sta nel campo, rimpicciolisce finché non entra
+    for (;;) {
+      ctx.font = `${15 * s}px system-ui, sans-serif`;
+      rows = lines.flatMap(l => wrapText(l, W - 40));
+      if (s <= 1 || (110 + rows.length * 24) * s <= H - 40) break;
+      s = Math.max(1, s * 0.92);
+    }
+    const LINE = 24 * s;
     // con i comandi sotto, titolo e sottotitolo salgono per lasciare spazio
-    const top = H / 2 - 10 - (lines.length * LINE) / 2;
+    const top = H / 2 - 10 * s - (rows.length * LINE) / 2;
     ctx.fillStyle = 'rgba(0,0,0,0.55)';
     ctx.fillRect(0, 0, W, H);
     ctx.fillStyle = '#fff';
     textGlow('#fff');
-    ctx.font = 'bold 40px system-ui, sans-serif';
+    ctx.font = `bold ${40 * s}px system-ui, sans-serif`;
     ctx.fillText(title, W / 2, top);
-    ctx.font = '18px system-ui, sans-serif';
+    ctx.font = `${18 * s}px system-ui, sans-serif`;
     ctx.fillStyle = '#b9c0e6';
     textGlow('#b9c0e6');
-    ctx.fillText(subtitle, W / 2, top + 38);
-    ctx.font = '15px system-ui, sans-serif';
+    wrapText(subtitle, W - 40).forEach((r, i) => ctx.fillText(r, W / 2, top + 38 * s + i * 22 * s));
+    ctx.font = `${15 * s}px system-ui, sans-serif`;
     ctx.fillStyle = '#dfe3f7';
-    lines.forEach((line, i) => ctx.fillText(line, W / 2, top + 84 + i * LINE));
+    rows.forEach((line, i) => ctx.fillText(line, W / 2, top + 84 * s + i * LINE));
     textGlowOff();
   }
 

@@ -541,8 +541,13 @@
       #lang-bar button:hover { border-color: #f7a3c7; }
       #lang-bar button.active { border-color: #f08bb8; box-shadow: 0 0 10px rgba(240,139,184,.5); }
       #lang-bar .flag { font-size: 1.05rem; line-height: 1; }
+      /* sul telefono: sopra logo e nome del sito, sotto tutte le lingue su una riga */
       @media (max-width: 560px) {
-        #site-header .brand span:last-child { display: none; }
+        #site-header { flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 12px; }
+        #site-header .logo { width: 40px; height: 40px; }
+        #site-header .brand span { font-size: 1.25rem; }
+        #lang-bar { flex-wrap: nowrap; justify-content: space-between; gap: 4px; }
+        #lang-bar button { flex: 1; justify-content: center; padding: 4px 0; }
         #lang-bar .code { display: none; }
       }
     `;

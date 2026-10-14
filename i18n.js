@@ -10,6 +10,7 @@
     { code: 'it', label: 'Italiano', flag: '🇮🇹' },
     { code: 'en', label: 'English', flag: '🇬🇧' },
     { code: 'es', label: 'Español', flag: '🇪🇸' },
+    { code: 'fr', label: 'Français', flag: '🇫🇷' },
     { code: 'ja', label: '日本語', flag: '🇯🇵' },
     { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
   ];
@@ -23,6 +24,13 @@
       'index.h1': '🎮 Sala Giochi',
       'index.subtitle': 'Scegli un gioco per iniziare',
       'index.footer': 'Nuovi giochi in arrivo!',
+      'intro.title': "Benvenuti su jose-margareth.com! 🎮",
+      'intro.tagline': "Il divertimento non ha età: entra, gioca e lasciati sorprendere!",
+      'intro.p1': "Preparati a entrare in un mondo pieno di colori, sfide e creatività! Jose-Margareth.com nasce per diventare una grande sala giochi digitale, un luogo dove bambini, ragazzi e adulti possono divertirsi, mettere alla prova le proprie abilità e condividere la passione per il gioco.",
+      'intro.p2': "🏓 <b>Sfida gli amici a Ping Pong</b>, costruisci mondi straordinari in <b>PixelCraft</b> e preparati a scoprire tanti nuovi giochi in arrivo!",
+      'intro.p3': "Che tu abbia voglia di competere, creare o semplicemente trascorrere qualche momento di puro divertimento, qui troverai sempre qualcosa di nuovo da provare.",
+      'intro.motto': "Una sola grande sala giochi, infinite possibilità di divertirsi.",
+      'intro.cta': "✨ Il prossimo livello ti aspetta. Sei pronto a giocare?",
       'card.soon': 'In arrivo',
       'card.play': '▶ Gioca',
       'card.soonTitle': 'Gioco {n}',
@@ -87,6 +95,13 @@
       'index.h1': '🎮 Game Room',
       'index.subtitle': 'Pick a game to start',
       'index.footer': 'New games coming soon!',
+      'intro.title': "Welcome to jose-margareth.com! 🎮",
+      'intro.tagline': "Fun has no age: come in, play and let yourself be surprised!",
+      'intro.p1': "Get ready to enter a world full of colours, challenges and creativity! Jose-Margareth.com was born to become a big digital game room, a place where children, teens and adults can have fun, test their skills and share their passion for games.",
+      'intro.p2': "🏓 <b>Challenge your friends at Ping Pong</b>, build amazing worlds in <b>PixelCraft</b> and get ready to discover lots of new games coming soon!",
+      'intro.p3': "Whether you feel like competing, creating or simply enjoying a few moments of pure fun, here you'll always find something new to try.",
+      'intro.motto': "One big game room, endless ways to have fun.",
+      'intro.cta': "✨ The next level is waiting for you. Ready to play?",
       'card.soon': 'Coming soon',
       'card.play': '▶ Play',
       'card.soonTitle': 'Game {n}',
@@ -151,6 +166,13 @@
       'index.h1': '🎮 Sala de Juegos',
       'index.subtitle': 'Elige un juego para empezar',
       'index.footer': '¡Nuevos juegos muy pronto!',
+      'intro.title': "¡Bienvenidos a jose-margareth.com! 🎮",
+      'intro.tagline': "La diversión no tiene edad: ¡entra, juega y déjate sorprender!",
+      'intro.p1': "¡Prepárate para entrar en un mundo lleno de colores, desafíos y creatividad! Jose-Margareth.com nace para convertirse en una gran sala de juegos digital, un lugar donde niños, jóvenes y adultos pueden divertirse, poner a prueba sus habilidades y compartir la pasión por el juego.",
+      'intro.p2': "🏓 <b>Reta a tus amigos al Ping Pong</b>, construye mundos extraordinarios en <b>PixelCraft</b> y prepárate para descubrir muchos juegos nuevos que están por llegar.",
+      'intro.p3': "Tengas ganas de competir, de crear o simplemente de pasar un rato de pura diversión, aquí siempre encontrarás algo nuevo para probar.",
+      'intro.motto': "Una sola gran sala de juegos, infinitas formas de divertirse.",
+      'intro.cta': "✨ El siguiente nivel te espera. ¿Estás listo para jugar?",
       'card.soon': 'Próximamente',
       'card.play': '▶ Jugar',
       'card.soonTitle': 'Juego {n}',
@@ -207,6 +229,76 @@
       'tool.tree': 'Árbol', 'tool.house': 'Casa', 'tool.pick': 'Pico (romper)',
     },
 
+    fr: {
+      'lang.label': '🌐 Langue',
+      'common.back': '← Tous les jeux',
+
+      'index.title': 'Salle de jeux',
+      'index.h1': '🎮 Salle de jeux',
+      'index.subtitle': 'Choisis un jeu pour commencer',
+      'index.footer': 'De nouveaux jeux arrivent bientôt !',
+      'intro.title': "Bienvenue sur jose-margareth.com ! 🎮",
+      'intro.tagline': "Le plaisir n'a pas d'âge : entre, joue et laisse-toi surprendre !",
+      'intro.p1': "Prépare-toi à entrer dans un monde plein de couleurs, de défis et de créativité ! Jose-Margareth.com est né pour devenir une grande salle de jeux numérique, un lieu où enfants, ados et adultes peuvent s'amuser, tester leurs talents et partager leur passion du jeu.",
+      'intro.p2': "🏓 <b>Défie tes amis au Ping Pong</b>, construis des mondes extraordinaires dans <b>PixelCraft</b> et prépare-toi à découvrir plein de nouveaux jeux à venir !",
+      'intro.p3': "Que tu aies envie de rivaliser, de créer ou simplement de passer un moment de pur plaisir, tu trouveras toujours ici quelque chose de nouveau à essayer.",
+      'intro.motto': "Une seule grande salle de jeux, des possibilités de s'amuser infinies.",
+      'intro.cta': "✨ Le niveau suivant t'attend. Prêt à jouer ?",
+      'card.soon': 'Bientôt',
+      'card.play': '▶ Jouer',
+      'card.soonTitle': 'Jeu {n}',
+      'card.soonDesc': 'Un nouveau jeu arrivera bientôt dans cette carte.',
+      'game.pingpong.desc': 'Défie un ami sur le même clavier. Atteins 10 points, choisis parmi plus de 40 couleurs de balle et attention aux tirs super rapides !',
+      'game.pixelcraft.desc': 'Un monde en pixels à construire : pose et casse des blocs, crée des maisons et plante des arbres en un clic, survole les collines.',
+      'tag.2players': '2 joueurs',
+      'tag.1player': '1 joueur',
+      'tag.keyboardTouch': 'Clavier / Tactile',
+      'tag.mouseTouch': 'Souris / Tactile',
+      'tag.40min': '40 min',
+      'tag.building': 'Construction',
+
+      'pp.doctitle': 'Ping Pong à 2 joueurs',
+      'pp.selectName': 'Choisis le nom du joueur {n}',
+      'pp.player': 'Joueur {n}',
+      'sec.original': '🎨 Couleurs originales',
+      'sec.original2': '🎨 Couleurs originales 2',
+      'sec.special': '✨ Couleurs spéciales',
+      'sec.elemental': '🌍 Couleurs des éléments',
+      'sec.hero': '🦸 Couleurs des héros',
+      'sec.mineral': '💎 Couleurs des minéraux',
+      'sec.flags': '🚩 Couleurs des drapeaux',
+      'sec.seasons': '🍂 Couleurs des saisons',
+      'sec.hedgehog': '🦔 Couleurs hérisson',
+      'sec.ultra': '💥 Couleur Ultra',
+      'pp.start': '▶ Jouer / Pause',
+      'pp.reset': '↺ Recommencer',
+      'pp.help': 'Joueur 1 : <kbd>W</kbd> haut, <kbd>S</kbd> bas &nbsp;·&nbsp; Joueur 2 : <kbd>↑</kbd> haut, <kbd>↓</kbd> bas &nbsp;·&nbsp; <kbd>Espace</kbd> pause &nbsp;·&nbsp; Le premier à 10 points gagne, ou celui qui a le plus de points à la fin des 40 minutes.<br>Sur écran tactile : fais glisser ton doigt sur la moitié gauche ou droite du terrain.',
+      'pp.superFast': '⚡ SUPER RAPIDE ! ⚡',
+      'pp.draw': '⏱ Temps écoulé : égalité !',
+      'pp.paused': 'En pause',
+      'pp.pressPlay': 'Appuie sur Espace ou « Jouer » pour commencer',
+      'pp.pressReset': 'Appuie sur « Recommencer » pour une nouvelle partie',
+      'pp.musicOn': '🔊 Musique : ON',
+      'pp.musicOff': '🔇 Musique : OFF',
+
+      'pc.holding': 'En main :',
+      'pc.fly': 'Vol :',
+      'pc.bgPlace': 'Poser en arrière-plan :',
+      'pc.btnFly': '✈️ Voler',
+      'pc.btnBg': '🧱 Arrière-plan',
+      'pc.btnSave': '💾 Sauvegarder',
+      'pc.btnNew': '🌍 Nouveau monde',
+      'pc.help': 'Se déplacer : <kbd>A</kbd> <kbd>D</kbd> ou <kbd>←</kbd> <kbd>→</kbd> &nbsp;·&nbsp; Sauter : <kbd>W</kbd> <kbd>↑</kbd> ou <kbd>Espace</kbd> &nbsp;·&nbsp; Voler : <kbd>F</kbd> (en vol, <kbd>W</kbd>/<kbd>S</kbd> pour monter et descendre)<br><b>Clic gauche</b> : poser le bloc &nbsp;·&nbsp; <b>Clic droit</b> (ou <kbd>Shift</kbd>+clic) : casser &nbsp;·&nbsp; Maintiens et fais glisser pour construire plusieurs blocs<br>Choisir le bloc : <kbd>1</kbd>…<kbd>0</kbd>, molette de la souris ou <kbd>Q</kbd>/<kbd>E</kbd> &nbsp;·&nbsp; <kbd>T</kbd> arbre &nbsp;·&nbsp; <kbd>C</kbd> maison &nbsp;·&nbsp; <kbd>X</kbd> pioche &nbsp;·&nbsp; <kbd>B</kbd> poser en arrière-plan',
+      'pc.saved': '💾 Monde sauvegardé',
+      'pc.saveError': "Impossible de sauvegarder le monde",
+      'pc.newConfirm': 'Créer un nouveau monde ? Le monde actuel sera effacé.',
+      'pc.newCreated': '🌍 Nouveau monde créé',
+      'block.grass': 'Herbe', 'block.dirt': 'Terre', 'block.stone': 'Pierre', 'block.cobble': 'Pierre taillée',
+      'block.log': 'Bûche', 'block.leaves': 'Feuilles', 'block.planks': 'Planches', 'block.glass': 'Verre',
+      'block.bricks': 'Briques', 'block.sand': 'Sable', 'block.water': 'Eau', 'block.bedrock': 'Bedrock',
+      'block.door': 'Porte', 'block.roof': 'Tuiles', 'block.flower': 'Fleur',
+      'tool.tree': 'Arbre', 'tool.house': 'Maison', 'tool.pick': 'Pioche (casser)',
+    },
     ja: {
       'lang.label': '🌐 言語',
       'common.back': '← すべてのゲーム',
@@ -215,6 +307,13 @@
       'index.h1': '🎮 ゲームルーム',
       'index.subtitle': 'ゲームを選んでスタート',
       'index.footer': '新しいゲームが近日登場！',
+      'intro.title': "jose-margareth.com へようこそ！🎮",
+      'intro.tagline': "楽しさに年齢は関係ない：入って、遊んで、驚きを楽しもう！",
+      'intro.p1': "色とチャレンジと創造力にあふれた世界へようこそ！Jose-Margareth.com は、子どもも若者も大人も一緒に楽しみ、自分の腕を試し、ゲームへの情熱を分かち合える、大きなデジタルゲームルームを目指して生まれました。",
+      'intro.p2': "🏓 <b>友だちとピンポンで対戦</b>したり、<b>PixelCraft</b> ですごい世界を作ったり、もうすぐ登場するたくさんの新しいゲームも楽しみにしていてね！",
+      'intro.p3': "競いたいときも、作りたいときも、ただ楽しいひとときを過ごしたいときも、ここにはいつも新しい遊びが待っています。",
+      'intro.motto': "ひとつの大きなゲームルーム、楽しみ方は無限大。",
+      'intro.cta': "✨ 次のレベルが待っています。遊ぶ準備はできた？",
       'card.soon': '近日公開',
       'card.play': '▶ あそぶ',
       'card.soonTitle': 'ゲーム {n}',
@@ -279,6 +378,13 @@
       'index.h1': '🎮 Spielhalle',
       'index.subtitle': 'Wähle ein Spiel, um zu starten',
       'index.footer': 'Neue Spiele kommen bald!',
+      'intro.title': "Willkommen auf jose-margareth.com! 🎮",
+      'intro.tagline': "Spaß kennt kein Alter: Komm rein, spiel mit und lass dich überraschen!",
+      'intro.p1': "Mach dich bereit für eine Welt voller Farben, Herausforderungen und Kreativität! Jose-Margareth.com soll ein großes digitales Spielzimmer werden – ein Ort, an dem Kinder, Jugendliche und Erwachsene Spaß haben, ihr Können testen und ihre Leidenschaft fürs Spielen teilen können.",
+      'intro.p2': "🏓 <b>Fordere deine Freunde beim Ping Pong heraus</b>, baue fantastische Welten in <b>PixelCraft</b> und freu dich auf viele neue Spiele, die bald kommen!",
+      'intro.p3': "Ob du Lust hast, dich zu messen, etwas zu erschaffen oder einfach ein paar Momente purer Freude zu genießen – hier findest du immer etwas Neues zum Ausprobieren.",
+      'intro.motto': "Ein großes Spielzimmer, unendlich viele Möglichkeiten, Spaß zu haben.",
+      'intro.cta': "✨ Das nächste Level wartet auf dich. Bist du bereit zu spielen?",
       'card.soon': 'Demnächst',
       'card.play': '▶ Spielen',
       'card.soonTitle': 'Spiel {n}',
@@ -341,6 +447,7 @@
     it: { rosso: 'Rosso', blu: 'Blu', verde: 'Verde', rosa: 'Rosa', viola: 'Viola', giallo: 'Giallo', arcobaleno: 'Arcobaleno', arancione: 'Arancione', celeste: 'Celeste', turchese: 'Turchese', bianco: 'Bianco', marrone: 'Marrone', yinyang: 'Yin Yang', galassia: 'Galassia', caramella: 'Caramella', maledetto: 'Maledetto', cyborg: 'Cyborg', lava: 'Lava', acqua: 'Acqua', terra: 'Terra', neve: 'Neve', spiderman: 'Spider-Man', ironman: 'Iron Man', captain: 'Capitan America', thor: 'Thor', hulk: 'Hulk', diamante: 'Diamante', smeraldo: 'Smeraldo', ametista: 'Ametista', netherite: 'Netherite', rame: 'Rame', oro: 'Oro', colombia: 'Colombia', italia: 'Italia', bolivia: 'Bolivia', inghilterra: 'Inghilterra', usa: 'Stati Uniti', francia: 'Francia', spagna: 'Spagna', germania: 'Germania', svizzera: 'Svizzera', ultra: 'Ultra', estate: 'Estate', inverno: 'Inverno', autunno: 'Autunno', primavera: 'Primavera', sonic: 'Sonic', shadow: 'Shadow' },
     en: { rosso: 'Red', blu: 'Blue', verde: 'Green', rosa: 'Pink', viola: 'Purple', giallo: 'Yellow', arcobaleno: 'Rainbow', arancione: 'Orange', celeste: 'Sky Blue', turchese: 'Turquoise', bianco: 'White', marrone: 'Brown', yinyang: 'Yin Yang', galassia: 'Galaxy', caramella: 'Candy', maledetto: 'Cursed', cyborg: 'Cyborg', lava: 'Lava', acqua: 'Water', terra: 'Earth', neve: 'Snow', spiderman: 'Spider-Man', ironman: 'Iron Man', captain: 'Captain America', thor: 'Thor', hulk: 'Hulk', diamante: 'Diamond', smeraldo: 'Emerald', ametista: 'Amethyst', netherite: 'Netherite', rame: 'Copper', oro: 'Gold', colombia: 'Colombia', italia: 'Italy', bolivia: 'Bolivia', inghilterra: 'England', usa: 'USA', francia: 'France', spagna: 'Spain', germania: 'Germany', svizzera: 'Switzerland', ultra: 'Ultra', estate: 'Summer', inverno: 'Winter', autunno: 'Autumn', primavera: 'Spring', sonic: 'Sonic', shadow: 'Shadow' },
     es: { rosso: 'Rojo', blu: 'Azul', verde: 'Verde', rosa: 'Rosa', viola: 'Morado', giallo: 'Amarillo', arcobaleno: 'Arcoíris', arancione: 'Naranja', celeste: 'Celeste', turchese: 'Turquesa', bianco: 'Blanco', marrone: 'Marrón', yinyang: 'Yin Yang', galassia: 'Galaxia', caramella: 'Caramelo', maledetto: 'Maldito', cyborg: 'Cíborg', lava: 'Lava', acqua: 'Agua', terra: 'Tierra', neve: 'Nieve', spiderman: 'Spider-Man', ironman: 'Iron Man', captain: 'Capitán América', thor: 'Thor', hulk: 'Hulk', diamante: 'Diamante', smeraldo: 'Esmeralda', ametista: 'Amatista', netherite: 'Netherita', rame: 'Cobre', oro: 'Oro', colombia: 'Colombia', italia: 'Italia', bolivia: 'Bolivia', inghilterra: 'Inglaterra', usa: 'EE. UU.', francia: 'Francia', spagna: 'España', germania: 'Alemania', svizzera: 'Suiza', ultra: 'Ultra', estate: 'Verano', inverno: 'Invierno', autunno: 'Otoño', primavera: 'Primavera', sonic: 'Sonic', shadow: 'Shadow' },
+    fr: { rosso: 'Rouge', blu: 'Bleu', verde: 'Vert', rosa: 'Rose', viola: 'Violet', giallo: 'Jaune', arcobaleno: 'Arc-en-ciel', arancione: 'Orange', celeste: 'Bleu ciel', turchese: 'Turquoise', bianco: 'Blanc', marrone: 'Marron', yinyang: 'Yin Yang', galassia: 'Galaxie', caramella: 'Bonbon', maledetto: 'Maudit', cyborg: 'Cyborg', lava: 'Lave', acqua: 'Eau', terra: 'Terre', neve: 'Neige', spiderman: 'Spider-Man', ironman: 'Iron Man', captain: 'Captain America', thor: 'Thor', hulk: 'Hulk', diamante: 'Diamant', smeraldo: 'Émeraude', ametista: 'Améthyste', netherite: 'Netherite', rame: 'Cuivre', oro: 'Or', colombia: 'Colombie', italia: 'Italie', bolivia: 'Bolivie', inghilterra: 'Angleterre', usa: 'États-Unis', francia: 'France', spagna: 'Espagne', germania: 'Allemagne', svizzera: 'Suisse', ultra: 'Ultra', estate: 'Été', inverno: 'Hiver', autunno: 'Automne', primavera: 'Printemps', sonic: 'Sonic', shadow: 'Shadow' },
     ja: { rosso: '赤', blu: '青', verde: '緑', rosa: 'ピンク', viola: '紫', giallo: '黄色', arcobaleno: '虹', arancione: 'オレンジ', celeste: '空色', turchese: 'ターコイズ', bianco: '白', marrone: '茶色', yinyang: '陰陽', galassia: '銀河', caramella: 'キャンディ', maledetto: '呪い', cyborg: 'サイボーグ', lava: '溶岩', acqua: '水', terra: '大地', neve: '雪', spiderman: 'スパイダーマン', ironman: 'アイアンマン', captain: 'キャプテン・アメリカ', thor: 'ソー', hulk: 'ハルク', diamante: 'ダイヤモンド', smeraldo: 'エメラルド', ametista: 'アメジスト', netherite: 'ネザライト', rame: '銅', oro: '金', colombia: 'コロンビア', italia: 'イタリア', bolivia: 'ボリビア', inghilterra: 'イングランド', usa: 'アメリカ', francia: 'フランス', spagna: 'スペイン', germania: 'ドイツ', svizzera: 'スイス', ultra: 'ウルトラ', estate: '夏', inverno: '冬', autunno: '秋', primavera: '春', sonic: 'ソニック', shadow: 'シャドウ' },
     de: { rosso: 'Rot', blu: 'Blau', verde: 'Grün', rosa: 'Rosa', viola: 'Lila', giallo: 'Gelb', arcobaleno: 'Regenbogen', arancione: 'Orange', celeste: 'Himmelblau', turchese: 'Türkis', bianco: 'Weiß', marrone: 'Braun', yinyang: 'Yin Yang', galassia: 'Galaxie', caramella: 'Bonbon', maledetto: 'Verflucht', cyborg: 'Cyborg', lava: 'Lava', acqua: 'Wasser', terra: 'Erde', neve: 'Schnee', spiderman: 'Spider-Man', ironman: 'Iron Man', captain: 'Captain America', thor: 'Thor', hulk: 'Hulk', diamante: 'Diamant', smeraldo: 'Smaragd', ametista: 'Amethyst', netherite: 'Netherit', rame: 'Kupfer', oro: 'Gold', colombia: 'Kolumbien', italia: 'Italien', bolivia: 'Bolivien', inghilterra: 'England', usa: 'USA', francia: 'Frankreich', spagna: 'Spanien', germania: 'Deutschland', svizzera: 'Schweiz', ultra: 'Ultra', estate: 'Sommer', inverno: 'Winter', autunno: 'Herbst', primavera: 'Frühling', sonic: 'Sonic', shadow: 'Shadow' },
   };
@@ -371,7 +478,6 @@
     r.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder, varsOf(el)); });
     const bar = document.getElementById('lang-bar');
     if (bar) {
-      bar.querySelector('.lang-label').textContent = t('lang.label');
       bar.querySelectorAll('button').forEach(b => {
         const on = b.dataset.lang === lang;
         b.classList.toggle('active', on);
@@ -388,46 +494,85 @@
     window.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
   }
 
-  // barra delle lingue, in fondo alla pagina
+  // header in cima alla pagina: a sinistra logo e nome del sito, a destra le lingue
   function buildBar() {
+    // font in corsivo elegante per il nome del sito
+    const font = document.createElement('link');
+    font.rel = 'stylesheet';
+    font.href = 'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap';
+    document.head.appendChild(font);
+
     const style = document.createElement('style');
     style.textContent = `
-      #lang-bar {
-        display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px;
-        width: 100%; max-width: 960px; margin: 28px auto 8px; padding: 14px 12px;
-        border-top: 1px solid #2a3155;
+      #site-header {
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        width: 100%; max-width: 1080px; margin: 0 auto 16px; padding: 10px 14px;
+        background: rgba(255, 255, 255, .88);
+        border: 1px solid #bcd5f5; border-radius: 16px;
         font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        text-align: left;
       }
-      #lang-bar .lang-label { color: #8a91b4; font-size: .9rem; font-weight: 600; margin-right: 4px; }
+      #site-header .brand {
+        display: flex; align-items: center; gap: 10px;
+        color: #C51F26; text-decoration: none; font-size: 1.2rem; font-weight: 800;
+      }
+      /* nome del sito in rosso neon soffice: alone leggero dello stesso colore */
+      #site-header .brand span {
+        font-family: "Dancing Script", "Brush Script MT", cursive;
+        font-size-adjust: .5;
+        font-size: 1.4rem; font-weight: 700; letter-spacing: .5px;
+        cursor: default; user-select: none;
+        text-shadow: 0 0 4px rgba(197, 31, 38, .45), 0 0 10px rgba(197, 31, 38, .3), 0 0 18px rgba(197, 31, 38, .18);
+      }
+      /* logo: l'avatar ritagliato in tondo, con un bordo azzurro-rosa */
+      #site-header .logo {
+        width: 48px; height: 48px; flex: none;
+        border-radius: 50%; object-fit: cover;
+        border: 2px solid #ffc4de; box-shadow: 0 0 0 2px #bfe0ff;
+      }
+      #lang-bar { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; min-width: 0; }
       #lang-bar button {
-        display: inline-flex; align-items: center; gap: 6px;
-        background: #1a1f36; color: #e8ebf7;
-        border: 2px solid #2a3155; border-radius: 999px;
-        padding: 6px 14px; font-size: .9rem; font-weight: 600; cursor: pointer;
+        display: inline-flex; align-items: center; gap: 5px;
+        background: #ffffff; color: #000000;
+        border: 2px solid #bcd5f5; border-radius: 999px;
+        padding: 4px 10px; font-size: .8rem; font-weight: 700; cursor: pointer;
         animation: none;
       }
-      #lang-bar button:hover { border-color: #4f7cff; }
-      #lang-bar button.active { border-color: #ffffff; box-shadow: 0 0 10px rgba(255,255,255,.5); }
-      #lang-bar .flag { font-size: 1.1rem; line-height: 1; }
+      #lang-bar button:hover { border-color: #f7a3c7; }
+      #lang-bar button.active { border-color: #f08bb8; box-shadow: 0 0 10px rgba(240,139,184,.5); }
+      #lang-bar .flag { font-size: 1.05rem; line-height: 1; }
+      @media (max-width: 560px) {
+        #site-header .brand span:last-child { display: none; }
+        #lang-bar .code { display: none; }
+      }
     `;
     document.head.appendChild(style);
+
+    const header = document.createElement('div');
+    header.id = 'site-header';
+    header.setAttribute('role', 'banner');
+
+    // nome del sito: solo da leggere, non è un link
+    const brand = document.createElement('div');
+    brand.className = 'brand';
+    brand.innerHTML = '<img class="logo" src="logo.png" alt="" aria-hidden="true"><span>jose-margareth.com</span>';
+    header.appendChild(brand);
 
     const bar = document.createElement('nav');
     bar.id = 'lang-bar';
     bar.setAttribute('aria-label', 'Lingua / Language');
-    const label = document.createElement('span');
-    label.className = 'lang-label';
-    bar.appendChild(label);
     LANGS.forEach(l => {
       const b = document.createElement('button');
       b.type = 'button';
       b.dataset.lang = l.code;
       b.lang = l.code;
-      b.innerHTML = `<span class="flag">${l.flag}</span><span>${l.label}</span>`;
+      b.title = l.label;
+      b.innerHTML = `<span class="flag">${l.flag}</span><span class="code">${l.code.toUpperCase()}</span>`;
       b.addEventListener('click', () => { setLang(l.code); b.blur(); });
       bar.appendChild(b);
     });
-    document.body.appendChild(bar);
+    header.appendChild(bar);
+    document.body.prepend(header);
   }
 
   window.I18N = { t, setLang, apply, get lang() { return lang; }, LANGS };

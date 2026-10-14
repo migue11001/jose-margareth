@@ -3,37 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="logo.png">
 <title data-i18n="index.title">Sala Giochi</title>
 <script src="i18n.js"></script>
 <style>
   :root {
-    --bg: #0f1220;
-    --panel: #1a1f36;
-    --panel-2: #222844;
-    --border: #2a3155;
-    --text: #e8ebf7;
-    --muted: #8a91b4;
-    --accent: #4f7cff;
+    --bg: #e2d2f4;
+    --panel: #ffffff;
+    --panel-2: #e2edff;
+    --border: #bcd5f5;
+    --text: #000000;
+    --muted: #000000;
+    --accent: #f7a3c7;
+    --accent-2: #9fcaf2;
   }
   * { box-sizing: border-box; }
+  button, input, select, kbd { font-family: inherit; }
   body {
     margin: 0;
     min-height: 100vh;
-    background: var(--bg);
+    background:
+      linear-gradient(180deg, #1689F5 0%, #F58CA8 100%),
+      var(--bg);
+    background-attachment: fixed;
     color: var(--text);
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
     padding: 32px 16px 48px;
   }
   main { max-width: 960px; margin: 0 auto; }
 
-  header { text-align: center; margin-bottom: 32px; }
-  h1 {
+  /* presentazione del sito: allineata a sinistra, senza riquadro,
+     solo le scritte con un leggero alone neon bianco */
+  .intro {
+    max-width: 760px;
     margin: 0;
-    font-size: 2.4rem;
-    letter-spacing: 1px;
-    animation: slow-blink 2.4s ease-in-out infinite;
+    padding: 8px 0 0;
+    text-align: left;
+    text-shadow: 0 0 4px rgba(255, 255, 255, .9), 0 0 10px rgba(255, 255, 255, .6), 0 0 18px rgba(255, 255, 255, .35);
   }
-  header p { margin: 8px 0 0; color: var(--muted); }
+  .intro h1 { margin: 0; font-size: 1.9rem; line-height: 1.2; }
+  .intro .tagline {
+    margin: 8px 0 16px;
+    font-size: 1.1rem; font-weight: 700;
+  }
+  .intro p { margin: 0 0 12px; font-size: 1rem; line-height: 1.55; }
+  /* il motto, tra due linee arcobaleno i cui colori scorrono di continuo */
+  .intro .motto {
+    position: relative;
+    margin: 18px 0 10px;
+    padding: 12px 0;
+    font-size: 1.12rem; font-weight: 700;
+  }
+  .intro .motto::before, .intro .motto::after {
+    content: "";
+    position: absolute; left: 0; right: 0;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, violet, red);
+    background-size: 200% 100%;
+    box-shadow: 0 0 6px rgba(255, 255, 255, .7);
+    animation: rainbow-flow 3s linear infinite;
+  }
+  .intro .motto::before { top: 0; }
+  /* la linea sotto scorre nel verso opposto, così l'arcobaleno sembra girare intorno al motto */
+  .intro .motto::after { bottom: 0; animation-direction: reverse; }
+  @keyframes rainbow-flow {
+    from { background-position: 0 0; }
+    to   { background-position: -200% 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .intro .motto::before, .intro .motto::after { animation: none; }
+  }
+  .intro .cta { margin: 0; font-size: 1.05rem; font-weight: 600; }
+  @media (max-width: 560px) {
+    .intro h1 { font-size: 1.5rem; }
+  }
 
   @keyframes slow-blink {
     0%, 100% {
@@ -43,100 +88,136 @@
     50% { opacity: .3; text-shadow: none; }
   }
 
-  .grid {
+  /* card in stile Netflix: copertine 16:9 in fila, al passaggio del mouse
+     la card si ingrandisce e sotto si apre il pannello con i dettagli */
+  .row {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 28px;
+    padding-bottom: 40px;
   }
 
   .card {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    background: var(--panel);
-    border: 2px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
+    display: block;
+    border-radius: 8px;
     color: inherit;
     text-decoration: none;
-    transition: transform .15s, box-shadow .15s, border-color .15s;
+    transition: transform .25s ease, box-shadow .25s ease;
+    transform-origin: center top;
   }
-  a.card:hover, a.card:focus-visible {
-    transform: translateY(-4px);
-    border-color: var(--card-color);
-    box-shadow: 0 0 18px var(--card-color), 0 0 36px color-mix(in srgb, var(--card-color) 40%, transparent);
-    outline: none;
-  }
-
-  .cover {
-    height: 150px;
-    display: grid;
-    place-items: center;
-    font-size: 4rem;
+  .card .thumb {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
     background: var(--cover);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .25);
+  }
+  .card .emoji {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    font-size: 3.4rem;
+    padding-bottom: 30px;
+  }
+  /* titolo sopra la copertina, con una sfumatura chiara per leggerlo bene */
+  .card .title {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    margin: 0; padding: 22px 12px 8px;
+    font-size: 1.35rem; font-weight: 700;
+    background: linear-gradient(to top, rgba(255, 255, 255, .92), rgba(255, 255, 255, 0));
   }
 
-  .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-  .body h2 { margin: 0; font-size: 1.3rem; }
-  .body p { margin: 0; color: var(--muted); font-size: .92rem; line-height: 1.45; flex: 1; }
+  .card .info {
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 12px 14px 14px;
+    background: var(--panel);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .3);
+  }
+  .card .info p { margin: 0; font-size: .85rem; line-height: 1.4; }
 
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  @media (hover: hover) and (min-width: 701px) {
+    .card .info {
+      position: absolute; top: 100%; left: 0; right: 0;
+      opacity: 0; visibility: hidden;
+      transition: opacity .2s ease, visibility .2s;
+    }
+    .card:hover, .card:focus-visible { transform: scale(1.18); z-index: 5; outline: none; }
+    .card:hover .thumb, .card:focus-visible .thumb { border-radius: 8px 8px 0 0; }
+    .card:hover .info, .card:focus-visible .info { opacity: 1; visibility: visible; }
+    /* le card ai bordi crescono verso l'interno, così non escono dalla pagina */
+    .row .card:first-child { transform-origin: left top; }
+    .row .card:last-child { transform-origin: right top; }
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; }
   .tag {
-    font-size: .75rem;
+    font-size: .72rem;
     font-weight: 600;
-    padding: 3px 9px;
+    padding: 2px 8px;
     border-radius: 999px;
     background: var(--panel-2);
     color: var(--muted);
   }
 
   .play {
-    margin-top: 6px;
     align-self: flex-start;
+    display: inline-flex; align-items: center; gap: 6px;
     background: var(--card-color);
-    color: #fff;
+    color: var(--text);
     font-weight: 700;
-    padding: 8px 18px;
-    border-radius: 8px;
+    padding: 6px 16px;
+    border-radius: 6px;
     --glow: #fff;
   }
   .play span { animation: slow-blink 2.4s ease-in-out infinite; }
 
   /* schede dei giochi che arriveranno */
-  .card.soon { border-style: dashed; }
-  .card.soon .cover {
-    background: repeating-linear-gradient(45deg, #161a2e 0 14px, #1b2038 14px 28px);
-    color: #3a4270;
-    font-weight: 900;
+  .card.soon .thumb {
+    background: repeating-linear-gradient(45deg, #fff0f6 0 14px, #eef6ff 14px 28px);
   }
-  .card.soon .body h2 { color: var(--muted); }
+  .card.soon .emoji { color: #e6c6dc; font-weight: 900; }
   .badge {
     position: absolute;
-    top: 12px; right: 12px;
-    font-size: .75rem;
+    top: 8px; right: 8px;
+    font-size: .72rem;
     font-weight: 700;
-    padding: 4px 10px;
+    padding: 3px 9px;
     border-radius: 999px;
-    background: #2a3155;
+    background: #bcd5f5;
     color: var(--text);
   }
 
-  footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 36px; }
+  footer { text-align: center; color: #000000; font-size: .85rem; margin-top: 24px; }
 
-  @media (max-width: 480px) {
-    h1 { font-size: 1.9rem; }
-    .cover { height: 120px; font-size: 3.2rem; }
+  /* sul telefono: la fila scorre di lato con il dito e i dettagli sono sempre visibili */
+  @media (max-width: 700px) {
+    .row {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      margin: 20px -16px 0;
+      padding: 0 16px 12px;
+    }
+    .card { flex: 0 0 78%; scroll-snap-align: start; }
   }
 </style>
 </head>
 <body>
 <main>
-  <header>
-    <h1 data-i18n="index.h1">🎮 Sala Giochi</h1>
-    <p data-i18n="index.subtitle">Scegli un gioco per iniziare</p>
+  <header class="intro">
+    <h1 data-i18n="intro.title"></h1>
+    <p class="tagline" data-i18n="intro.tagline"></p>
+    <p data-i18n="intro.p1"></p>
+    <p data-i18n-html="intro.p2"></p>
+    <p data-i18n="intro.p3"></p>
+    <p class="motto" data-i18n="intro.motto"></p>
+    <p class="cta" data-i18n="intro.cta"></p>
   </header>
 
-  <section class="grid" id="games"></section>
+  <section class="row" id="games"></section>
 
   <footer data-i18n="index.footer">Nuovi giochi in arrivo!</footer>
 </main>
@@ -151,8 +232,8 @@
       file: 'pingpong.html',
       description: 'game.pingpong.desc',
       tags: ['tag.2players', 'tag.keyboardTouch', 'tag.40min'],
-      color: '#4f7cff',
-      cover: 'linear-gradient(135deg, #1a2a6c, #4f7cff 55%, #a24bff)',
+      color: '#f7a3c7',
+      cover: 'linear-gradient(135deg, #bfe0ff, #d9c8f5 50%, #ffc4de)',
     },
     {
       title: 'PixelCraft',
@@ -167,11 +248,11 @@
     { number: 4, emoji: '?', file: '', tags: [] },
   ];
 
-  const grid = document.getElementById('games');
+  const row = document.getElementById('games');
   const t = (key, vars) => I18N.t(key, vars);
 
   function renderGames() {
-    grid.innerHTML = '';
+    row.innerHTML = '';
     GAMES.forEach(game => {
       const available = Boolean(game.file);
       const card = document.createElement(available ? 'a' : 'div');
@@ -180,26 +261,41 @@
         card.href = game.file;
         card.style.setProperty('--card-color', game.color);
         card.style.setProperty('--cover', game.cover);
+      } else {
+        card.tabIndex = 0;
       }
 
-      const cover = document.createElement('div');
-      cover.className = 'cover';
-      cover.textContent = game.emoji;
-      card.appendChild(cover);
-
+      // copertina con emoji, titolo sopra l'immagine ed eventuale "In arrivo"
+      const thumb = document.createElement('div');
+      thumb.className = 'thumb';
+      const emoji = document.createElement('div');
+      emoji.className = 'emoji';
+      emoji.textContent = game.emoji;
+      thumb.appendChild(emoji);
       if (!available) {
         const badge = document.createElement('span');
         badge.className = 'badge';
         badge.textContent = t('card.soon');
-        card.appendChild(badge);
+        thumb.appendChild(badge);
       }
+      const title = document.createElement('h2');
+      title.className = 'title';
+      title.textContent = available ? game.title : t('card.soonTitle', { n: game.number });
+      thumb.appendChild(title);
+      card.appendChild(thumb);
 
-      const body = document.createElement('div');
-      body.className = 'body';
+      // pannello dei dettagli
+      const info = document.createElement('div');
+      info.className = 'info';
 
-      const h2 = document.createElement('h2');
-      h2.textContent = available ? game.title : t('card.soonTitle', { n: game.number });
-      body.appendChild(h2);
+      if (available) {
+        const play = document.createElement('span');
+        play.className = 'play';
+        const label = document.createElement('span');
+        label.textContent = t('card.play');
+        play.appendChild(label);
+        info.appendChild(play);
+      }
 
       if (game.tags.length) {
         const tags = document.createElement('div');
@@ -210,24 +306,15 @@
           tag.textContent = t(key);
           tags.appendChild(tag);
         });
-        body.appendChild(tags);
+        info.appendChild(tags);
       }
 
       const p = document.createElement('p');
       p.textContent = available ? t(game.description) : t('card.soonDesc');
-      body.appendChild(p);
+      info.appendChild(p);
 
-      if (available) {
-        const play = document.createElement('span');
-        play.className = 'play';
-        const label = document.createElement('span');
-        label.textContent = t('card.play');
-        play.appendChild(label);
-        body.appendChild(play);
-      }
-
-      card.appendChild(body);
-      grid.appendChild(card);
+      card.appendChild(info);
+      row.appendChild(card);
     });
   }
 
